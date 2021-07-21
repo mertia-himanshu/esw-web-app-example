@@ -10,7 +10,7 @@ import {
   mockFetch,
   renderWithRouter
 } from '../utils/test-utils'
-
+// #add-test
 describe('Ra', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 
@@ -57,3 +57,4 @@ describe('Ra', () => {
     expect(JSON.stringify(secondArg)).to.equal(JSON.stringify(expectedReq))
   })
 })
+// #add-test

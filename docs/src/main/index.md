@@ -212,121 +212,59 @@ You should receive response like
 
 ### Steps to update frontend
 
-npm i
+Go to `pages` folder in `src`   
+Delete all component files under this directory     
+Go to `pages` folder in `test`  
+Delete all test files under this directory   
+Delete `Menu.tsx`, `Route.tsx`, `api.ts`    
+Delete folder `form`
 
-Go to pages folder in src - delete all component files under this directory Go to pages folder in test - delete all test
-files under this directory Delete Menu.tsx and Route.tsx , api.ts Delete folder form
+#### Add models
 
-Add models
+Go to `Models.ts`   
+Delete existing model interfaces 
+Add our request and response models
 
-go to models.ts , delete existing model interfaces Add
+Typescript
+: @@snip [Models.ts](../../../frontend/src/models/Models.ts) { #add-models }
 
-    export interface RaRequest {
-      raInDecimals: number
-    }
+#### Add Fetch
 
-    export interface RaResponse {
-      formattedRa: string
-    }
+Create `api.ts` in `utils` folder
+Implement method to fetch data from backend endpoint 
 
-create api.ts in utils folder
+Typescript
+: @@snip [api.ts](../../../frontend/src/utils/api.ts) { #fetch-data }
 
-implement fetch call export const fetchFormattedRa = async (
-baseUrl: string, raRequest: RaRequest
-): Promise<RaResponse | undefined> =>
-(await post<RaRequest, RaResponse>(baseUrl + 'formattedRa', raRequest))
-.parsedBody
+#### Add our React component
 
-in pages dir create Ra.tsx Add a simple input form
+In `pages` folder create `Ra.tsx`   
+Add a simple input form
 
-    export const Ra = (): JSX.Element => {
-      const onFinish = async (values: RaRequest) => {
-        console.log(values)
-      }
+Typescript
+: @@snip [Ra.tsx](../../../frontend/src/components/pages/Ra.tsx) { #add-component }
 
-      return (
-        <Form onFinish={onFinish}>
-          <Form.Item label='RaInDecimals' name='raInDecimals'>
-            <Input role='RaInDecimals' />
-          </Form.Item>
-          <Form.Item>
-            <Button type='primary' htmlType='submit' role='Submit'>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      )
-    }
+#### Use fetch in our component     
 
-implement onFinish
-
-```
-const onFinish = async (values: RaRequest) => { const backendUrl = await getBackendUrl(locationService)
-const valueInDecimal = { raInDecimals: Number(values.raInDecimals) } if (backendUrl) 
-{ const response = await
-fetchFormattedRa(backendUrl, valueInDecimal)
-console.log(response)
-} }
-
-```
-
-in App.tsx remove <Routes/> and add our component route
-<Route exact path='/' component={Ra} />
-remove <MenuBar/> and add out component menu
-<Menu mode='horizontal'>
-<Menu.Item key='ra'>
-<Link to='/'>Ra to String</Link>
-</Menu.Item>
-</Menu>
+Typescript
+: @@snip [Ra.tsx](../../../frontend/src/components/pages/Ra.tsx) { #use-fetch }
 
 
-Add Ra.test.tsx
+In `App.tsx` remove `<Routes />` and map our component to route
 
-    describe('Ra', () => {
-      const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
+Typescript
+: @@snip [App.tsx](../../../frontend/src/App.tsx) { #add-route }
 
-      const httpLocation: HttpLocation = {
-        _type: 'HttpLocation',
-        uri: 'some-backend-url',
-        connection,
-        metadata: {}
-      }
-      when(locationServiceMock.find(deepEqual(connection))).thenResolve(
-        httpLocation
-      )
+remove `<MenuBar/>` and add our route to menu item action
 
-      it('should render Input form and sent in to backend', async () => {
-        const raInDecimals = 2.13
-        const raRequest = { raInDecimals }
-        const response = new Response(JSON.stringify({ formattedRa: 'some-value' }))
-        const fetch = mockFetch()
+Typescript
+: @@snip [App.tsx](../../../frontend/src/App.tsx) { #add-route-action }
 
-        when(fetch(anything(), anything())).thenResolve(response)
 
-        renderWithRouter(<Ra />)
+Add `Ra.test.tsx` in `test/pages`
 
-        const input = (await screen.findByRole('RaInDecimals')) as HTMLInputElement
+Typescript
+: @@snip [Ra.test.tsx](../../../frontend/test/pages/Ra.test.tsx) { #add-test }
 
-        userEvent.type(input, raInDecimals.toString())
-
-        const submitButton = (await screen.findByRole(
-          'Submit'
-        )) as HTMLButtonElement
-
-        await waitFor(() => userEvent.click(submitButton))
-
-        verify(locationServiceMock.find(deepEqual(connection))).called()
-        const [firstArg, secondArg] = capture(fetch).last()
-        expect(firstArg).to.equal(httpLocation.uri + 'formattedRa')
-
-        const expectedReq = {
-          method: 'POST',
-          body: JSON.stringify(raRequest),
-          headers: { 'Content-Type': 'application/json' }
-        }
-
-        expect(JSON.stringify(secondArg)).to.equal(JSON.stringify(expectedReq))
-      })
-    })
 
 

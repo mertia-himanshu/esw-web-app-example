@@ -8,6 +8,7 @@ import { getBackendUrl } from '../../utils/resolveBackend'
 export const Ra = (): JSX.Element => {
   const locationService = useLocationService()
 
+  // #use-fetch
   const onFinish = async (values: RaRequest) => {
     const backendUrl = await getBackendUrl(locationService)
     const valueInDecimal = { raInDecimals: Number(values.raInDecimals) }
@@ -16,7 +17,9 @@ export const Ra = (): JSX.Element => {
       console.log(response)
     }
   }
+  // #use-fetch
 
+  // #add-component
   return (
     <Form onFinish={onFinish}>
       <Form.Item label='RaInDecimals' name='raInDecimals'>
@@ -29,4 +32,5 @@ export const Ra = (): JSX.Element => {
       </Form.Item>
     </Form>
   )
+  // #add-component
 }

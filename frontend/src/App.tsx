@@ -24,11 +24,15 @@ export const App = (): JSX.Element => {
         <AuthContextProvider>
           <Router basename={basename}>
             <Menu mode='horizontal'>
+              {/*// #add-route-action */}
               <Menu.Item key='ra'>
                 <Link to='/'>Ra to String</Link>
               </Menu.Item>
+              {/*// #add-route-action */}
             </Menu>
+            {/*// #add-route */}
             <Route exact path='/' component={Ra} />
+            {/*// #add-route */}
           </Router>
         </AuthContextProvider>
       </LocationServiceProvider>
