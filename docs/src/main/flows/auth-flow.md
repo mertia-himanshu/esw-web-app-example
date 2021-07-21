@@ -1,6 +1,6 @@
 # Adding Authentication
 
-## Backend Changes
+## Update Backend
 
 #### Add new route with protection
 
@@ -24,7 +24,7 @@ Add Failure test for user without required role
 Scala
 : @@snip [SampleAppIntegrationTest.scala](../../../../backend/src/test/scala/org/tmt/sample/integration/SampleAppIntegrationTest.scala) { #add-secured-route-failure-test }
 
-## Frontend Changes
+## Update Frontend
 
 #### Add secured Fetch
 

@@ -1,6 +1,6 @@
 # Creating a Web Application
 
-## Create Sample Application
+## Generate Application
 
 ```
 g8 tmtsoftware/esw-web-app-template.g8 --name=sample
@@ -8,7 +8,7 @@ g8 tmtsoftware/esw-web-app-template.g8 --name=sample
 
 It will generate a sample folder with two sub-folders, `frontend` and `backend`
 
-### Compile frontend
+## Compile frontend
 
 ```
 cd sample/frontend
@@ -16,7 +16,7 @@ npm install
 npm run build
 ```
 
-### Compile backend
+## Compile backend
 
 ```
 cd sample/backend
@@ -24,7 +24,7 @@ sbt
 sbt:backend> compile
 ```
 
-### Steps to update backend
+## Update backend
 
 Open backend folder in you editor(e.g. Intellij)
 e.g.
@@ -210,7 +210,7 @@ You should receive response like
 }
 ```
 
-### Steps to update frontend
+## Update frontend
 
 Go to `pages` folder in `src`   
 Delete all component files under this directory     
