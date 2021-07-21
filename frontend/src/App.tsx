@@ -36,12 +36,12 @@ export const App = (): JSX.Element => {
             <Menu mode='horizontal'>
               {/*// #add-route-action */}
               <Menu.Item key='ra'>
-                <Link to='/'>Ra to String</Link>
+                <Link to='/'>Ra</Link>
               </Menu.Item>
               {/*// #add-route-action */}
               {/*// #add-protected-route-action */}
               <Menu.Item key='securedRa'>
-                <Link to='/securedRa'>Ra to String</Link>
+                <Link to='/securedRa'>SecuredRa</Link>
               </Menu.Item>
               {/*// #add-protected-route-action */}
               {/*// #add-login-logout */}
