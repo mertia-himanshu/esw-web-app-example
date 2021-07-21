@@ -4,7 +4,7 @@ import { HttpConnection, HttpLocation, Prefix } from '@tmtsoftware/esw-ts'
 import { expect } from 'chai'
 import React from 'react'
 import { anything, capture, deepEqual, verify, when } from 'ts-mockito'
-import { Ra } from '../../src/components/pages/Ra'
+import { SecuredRa } from '../../src/components/pages/SecuredRa'
 import {
   locationServiceMock,
   mockFetch,
@@ -12,7 +12,7 @@ import {
 } from '../utils/test-utils'
 
 // #add-test
-describe('Ra', () => {
+describe('SecuredRa', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 
   const httpLocation: HttpLocation = {
@@ -33,7 +33,7 @@ describe('Ra', () => {
 
     when(fetch(anything(), anything())).thenResolve(response)
 
-    renderWithRouter(<Ra />)
+    renderWithRouter(<SecuredRa />)
 
     const input = (await screen.findByRole('RaInDecimals')) as HTMLInputElement
 
@@ -47,12 +47,15 @@ describe('Ra', () => {
 
     verify(locationServiceMock.find(deepEqual(connection))).called()
     const [firstArg, secondArg] = capture(fetch).last()
-    expect(firstArg).to.equal(httpLocation.uri + 'formattedRa')
+    expect(firstArg).to.equal(httpLocation.uri + 'securedFormattedRa')
 
     const expectedReq = {
       method: 'POST',
       body: JSON.stringify(raRequest),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer token string'
+      }
     }
 
     expect(JSON.stringify(secondArg)).to.equal(JSON.stringify(expectedReq))
