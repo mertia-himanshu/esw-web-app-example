@@ -8,9 +8,11 @@ import org.tmt.sample.core.models.{RaRequest, RaResponse}
 class RaImplTest extends AnyWordSpec with Matchers {
 
   "RaImpl" must {
+    // #raToString-impl-test
     "convert Ra to String" in {
       val raImpl = new RaImpl()
       raImpl.raToString(RaRequest(2.13)) should ===(RaResponse("8h 8m 9.602487087684134s"))
     }
+    // #raToString-impl-test
   }
 }

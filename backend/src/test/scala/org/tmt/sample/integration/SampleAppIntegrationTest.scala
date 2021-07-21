@@ -59,6 +59,7 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
 
   "SampleWiring" must {
 
+    // #add-route-test
     "should call formattedRa and receive Response" in {
       val raRequest = RaRequest(2.13)
       val request = HttpRequest(
@@ -73,6 +74,7 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
         RaResponse("8h 8m 9.602487087684134s")
       )
     }
+    // #add-route-test
   }
 
   private def startAndRegisterKeycloak(port: Int): StopHandle = {

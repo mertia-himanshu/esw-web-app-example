@@ -8,10 +8,13 @@ import org.tmt.sample.core.models.RaRequest
 
 import scala.concurrent.ExecutionContext
 
+//#raImpl-ref
 class SampleRoute(raImpl: RaImpl, securityDirectives: SecurityDirectives)(implicit
     ec: ExecutionContext
 ) extends HttpCodecs {
+//#raImpl-ref
 
+  // #add-route
   val route: Route = post {
     path("formattedRa") {
       entity(as[RaRequest]) { raRequest =>
@@ -20,5 +23,6 @@ class SampleRoute(raImpl: RaImpl, securityDirectives: SecurityDirectives)(implic
       }
     }
   }
+  // #add-route
 
 }
