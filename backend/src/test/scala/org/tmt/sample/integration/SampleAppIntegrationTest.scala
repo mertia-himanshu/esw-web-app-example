@@ -4,6 +4,7 @@ import akka.actor.typed.{ActorSystem, SpawnProtocol}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Path
 import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.headers.{Authorization, OAuth2BearerToken}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import csw.aas.core.commons.AASConnection
 import csw.location.api.models.Connection.HttpConnection
@@ -60,7 +61,7 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
   "SampleWiring" must {
 
     // #add-route-test
-    "should call formattedRa and receive Response" in {
+    "call formattedRa and receive Response" in {
       val raRequest = RaRequest(2.13)
       val request = HttpRequest(
         HttpMethods.POST,
@@ -75,6 +76,41 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
       )
     }
     // #add-route-test
+
+    // #add-secured-route-test
+    "call securedFormattedRa and receive valid response when user have required role" in {
+      val token     = getToken("admin", "password1")()
+      val raRequest = RaRequest(2.13)
+      val request = HttpRequest(
+        HttpMethods.POST,
+        uri = appUri.withPath(Path / "securedFormattedRa"),
+        headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
+        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
+      )
+
+      val response: HttpResponse = Http().singleRequest(request).futureValue
+      response.status should ===(StatusCode.int2StatusCode(200))
+      Unmarshal(response).to[RaResponse].futureValue should ===(
+        RaResponse("8h 8m 9.602487087684134s")
+      )
+    }
+    // #add-secured-route-test
+
+    // #add-secured-route-failure-test
+    "call securedFormattedRa and receive 403 when user does not have required role" in {
+      val token     = getToken("nonAdmin", "password2")()
+      val raRequest = RaRequest(2.13)
+      val request = HttpRequest(
+        HttpMethods.POST,
+        uri = appUri.withPath(Path / "securedFormattedRa"),
+        headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
+        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
+      )
+
+      val response: HttpResponse = Http().singleRequest(request).futureValue
+      response.status should ===(StatusCode.int2StatusCode(403))
+    }
+    // #add-secured-route-failure-test
   }
 
   private def startAndRegisterKeycloak(port: Int): StopHandle = {

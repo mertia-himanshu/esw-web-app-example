@@ -3,6 +3,7 @@ package org.tmt.sample.http
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.BasicDirectives
 import akka.http.scaladsl.testkit.ScalatestRouteTest
+import csw.aas.http.AuthorizationPolicy.RealmRolePolicy
 import csw.aas.http.SecurityDirectives
 import csw.location.api.models.ComponentType.Service
 import csw.location.api.models.Connection.HttpConnection
@@ -21,7 +22,7 @@ import org.tmt.sample.core.models.{RaRequest, RaResponse}
 class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpCompat with BeforeAndAfterEach with HttpCodecs {
 
   // #add-mock
-  private val service1: RaImpl                       = mock[RaImpl]
+  private val service1: RaImpl = mock[RaImpl]
   // #add-mock
   private val securityDirectives: SecurityDirectives = mock[SecurityDirectives]
   private val token: AccessToken                     = mock[AccessToken]
@@ -31,11 +32,11 @@ class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpC
   private val route: Route = new SampleRoute(service1, securityDirectives).route
   // #add-mock-dep
 
-  override protected def beforeEach(): Unit = reset(securityDirectives)
+  override protected def beforeEach(): Unit = reset(service1, securityDirectives)
 
   "SampleRoute" must {
     // #add-route-test
-    "formattedRa must call raToString" in {
+    "call raToString on formattedRa route" in {
       val response  = RaResponse("some-value")
       val raRequest = RaRequest(2.13)
       when(service1.raToString(raRequest)).thenReturn(response)
@@ -46,6 +47,22 @@ class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpC
       }
     }
     // #add-route-test
+
+    // #add-secured-route-test
+    "call raToString on securedFormattedRa route with access token" in {
+      val response  = RaResponse("some-value")
+      val raRequest = RaRequest(2.13)
+      val policy    = RealmRolePolicy("Esw-user")
+      when(securityDirectives.sPost(policy)).thenReturn(accessTokenDirective)
+      when(service1.raToString(raRequest)).thenReturn(response)
+
+      Post("/securedFormattedRa", raRequest) ~> route ~> check {
+        verify(service1).raToString(raRequest)
+        verify(securityDirectives).sPost(policy)
+        responseAs[RaResponse] should ===(response)
+      }
+    }
+    // #add-secured-route-test
   }
 
   val connection: Connection.HttpConnection = HttpConnection(ComponentId(Prefix(TestHelper.randomSubsystem, "sample"), Service))
