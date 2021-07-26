@@ -1,4 +1,5 @@
 import com.typesafe.sbt.site.SitePlugin.autoImport.siteDirectory
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
 import org.tmt.sbt.docs.DocKeys.{docsParentDir, docsRepo, gitCurrentRepo}
 import sbt.Keys._
 import sbt._
@@ -46,6 +47,7 @@ object Common {
       state
     },
     isSnapshot := !sys.props.get("prod.publish").contains("true"),
+    scalafmtOnCompile := true,
     fork := true,
     autoCompilerPlugins := true,
     cancelable in Global := true // allow ongoing test(or any task) to cancel with ctrl + c and still remain inside sbt
