@@ -10,6 +10,11 @@ We have set up some [sample users](https://tmtsoftware.github.io/csw/apps/cswser
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-secured-route }
 
+@@@note
+tilda (~) is used as a path concatenator in akka dsl.
+You can safely remove it for now. However, in the following section of this tutorial we are going to add new routes to this file. you can add it again.
+@@@
+
 ### Add test for newly added route
 
 Add test in `SampleRouteTest.scala` for protected route
@@ -33,13 +38,15 @@ Scala
 
 ### Add secured Fetch
 
-Add method in `api.ts`
+Add the following method in `api.ts` which post request to `/securedRaValues` backend route.
+
 Typescript
 : @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #secured-fetch-data }
 
 ### Add our React component to consume secured fetch
 
-Add new file `SecuredRa.tsx` and add component
+* In `pages` folder create `SecuredRa.tsx`
+* Add the following form to the `SecuredRa` react component
 
 Typescript
 : @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #add-component }
@@ -49,29 +56,38 @@ Typescript
 Typescript
 : @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-fetch }
 
+You would require locationService instance for getting backend url. This instance is available via context named `LocationServiceProvider`.
+Add the following as first line inside the `SecuredRa` component.
+
+Typescript
+: @@snip [Ra.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-location-service-from-context }
+
 Add protected route in `App.tsx`
 
 Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #add-protected-route }
+: @@snip [App.tsx](../../../../frontend/src/routes/Routes.tsx) { #add-protected-route }
 
-Add menu item action for protected route in `App.tsx`
+Update Menubar
+
+* Remove the `/greeting` menu item
+* Update menu item action for protected route in `App.tsx` from `AdminGreeting` to `SecuredRa`.
 
 Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #add-protected-route-action }
+: @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-protected-route-action }
 
 Add `SecuredRa.test.tsx` in `test/pages`
 
 Typescript
 : @@snip [SecuredRa.test.tsx](../../../../frontend/test/pages/SecuredRa.test.tsx) { #add-test }
 
-Add `Login` and `Logout` functionality
+Make use of generated `Login` and `Logout` components .
 
-Use Auth Hook
-
-Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #use-auth-hook }
-
-Add menu items actions
+Add menu items actions for `logging in` and `logging out` in `MenuBar.tsx`.
 
 Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #add-login-logout }
+: @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-login-logout }
+
+Use Auth Hook to get handle on auth store.
+
+Typescript
+: @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #use-auth-hook }

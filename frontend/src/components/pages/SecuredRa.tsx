@@ -6,10 +6,13 @@ import type { RaRequest } from '../../models/Models'
 import { fetchSecuredRaValues } from '../../utils/api'
 import { errorMessage } from '../../utils/message'
 import { getBackendUrl } from '../../utils/resolveBackend'
-
+  // #add-component
+  // #use-location-service-from-context
 export const SecuredRa = (): JSX.Element => {
+   // #add-component
   const locationService = useLocationService()
   const { auth } = useAuth()
+  // #use-location-service-from-context
 
   // #use-fetch
   const onFinish = async (values: RaRequest) => {
@@ -49,5 +52,5 @@ export const SecuredRa = (): JSX.Element => {
       </Form.Item>
     </Form>
   )
-  // #add-component
 }
+// #add-component

@@ -12,8 +12,9 @@ export const MenuBar = (): JSX.Element => {
   // #use-auth-hook
 
   return (
+    <>
+    {/*// #add-route-action */}
     <Menu mode='horizontal'>
-      {/*// #add-route-action */}
       <Menu.Item key='ra'>
         <Link to='/'>Ra</Link>
       </Menu.Item>
@@ -26,6 +27,9 @@ export const MenuBar = (): JSX.Element => {
       {/*// #add-login-logout */}
       {isAuthenticated ? <Logout logout={logout} /> : <Login login={login} />}
       {/*// #add-login-logout */}
+     {/*// #add-route-action */}
     </Menu>
+     {/*// #add-route-action */}
+    </>
   )
 }

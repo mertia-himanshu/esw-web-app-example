@@ -12,9 +12,9 @@ class SampleWiring(val port: Option[Int]) extends ServerWiring {
   lazy val raImpl = new RaImpl()
   // #raImpl-ref
 
-  import actorRuntime.ec
-
+  
   // #add-route
+  import actorRuntime.ec
   override lazy val routes: Route = new SampleRoute(raImpl, securityDirectives).route
   // #add-route
 

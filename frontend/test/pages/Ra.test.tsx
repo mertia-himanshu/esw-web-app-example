@@ -1,3 +1,4 @@
+// #add-test
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { HttpConnection, HttpLocation, Prefix } from '@tmtsoftware/esw-ts'
@@ -11,7 +12,7 @@ import {
   renderWithRouter
 } from '../utils/test-utils'
 
-// #add-test
+
 describe('Ra', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 

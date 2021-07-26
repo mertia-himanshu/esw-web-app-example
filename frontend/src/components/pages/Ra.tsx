@@ -4,9 +4,12 @@ import { useLocationService } from '../../contexts/LocationServiceContext'
 import type { RaRequest } from '../../models/Models'
 import { fetchRaValues } from '../../utils/api'
 import { getBackendUrl } from '../../utils/resolveBackend'
-
+  // #add-component
+  // #use-location-service-from-context
 export const Ra = (): JSX.Element => {
+  // #add-component
   const locationService = useLocationService()
+  // #use-location-service-from-context
 
   // #use-fetch
   const onFinish = async (values: RaRequest) => {
@@ -23,8 +26,7 @@ export const Ra = (): JSX.Element => {
     }
   }
   // #use-fetch
-
-  // #add-component
+// #add-component
   return (
     <Form onFinish={onFinish}>
       <Form.Item label='RaInDecimals' name='raInDecimals'>
@@ -37,5 +39,5 @@ export const Ra = (): JSX.Element => {
       </Form.Item>
     </Form>
   )
-  // #add-component
 }
+ // #add-component

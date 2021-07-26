@@ -7,6 +7,7 @@ import { fetchRaValues } from '../utils/api'
 import { getBackendUrl } from '../utils/resolveBackend'
 
 export const Ra = (): JSX.Element => {
+
   const locationService = useLocationService()
 
   // #use-fetch

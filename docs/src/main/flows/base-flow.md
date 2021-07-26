@@ -62,27 +62,25 @@ cd sample/backend
 idea .
 ```
 
-### CleanUp existing sample
+### Cleanup existing sample
 
 Generated code contains a sample application, we will delete its code and add ours where appropriate.
 
-Delete folder `src/main/java` ,`src/test/java`
-Delete file `JSampleImplWrapper.scala`, `JSampleImplWrapperTest.scala`, `SampleImpl.scala`, `SampleImplTest.scala`
-
-Go to `SampleRouteTest.scala`
-Remove existing tests
-Remove any references to deleted classes
-
-Go to `SampleAppIntegrationTest.scala`
+* Delete folder `src/main/java` ,`src/test/java`
+* Delete file `JSampleImplWrapper.scala`, `JSampleImplWrapperTest.scala`, `SampleImpl.scala`, `SampleImplTest.scala`
+* Go to `SampleRouteTest.scala`
+* Remove existing tests
+* Remove any references to deleted classes
+* Go to `SampleAppIntegrationTest.scala`
 Remove existing tests
 
 ### Add our Models classes
 
 These model classes will be used to serialized and deserialized your request and response.
 
-Go to `core/models` in `src`
-Delete Existing Model classes  
-Add `RaRequest.scala` model class
+* Go to `core/models` in `src`
+* Delete Existing Model classes  
+* Add `RaRequest.scala` model class
 
 Scala
 : @@snip [RaRequest.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaRequest.scala) { #request-model }
@@ -94,27 +92,31 @@ Scala
 
 ### Add our custom implementation for method `raToString` and write test for it
 
-Add contract
-Go to `src`, add package folder with name `service`
-Add file `RaService.scala` and add our `raToString` contract, using our request and response model  
+* Add contract
+* Go to `src`, add package folder with name `service`
+* Add a scala trait in `RaService.scala` file and add our `raToString` contract, using our request and response model  
 
 Scala
 : @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #raToString-contract }
 
-Go to `core` in `src`
-Add `RaImpl.scala`  
-Extend `RaService.scala` to implement `raToString` contract
+* Go to `core` in `src`
+* Add `RaImpl.scala`  
+* Extend `RaService.scala` to implement `raToString` contract
 
 Scala
 : @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/core/RaImpl.scala) { #raToString-impl }
 
-Add `RaImpltest.scala` in corresponding `test` directory
-Implement test `convert Ra to String`
+* Add `RaImplTest.scala` in corresponding `test` directory
+* Implement test `convert Ra to String`
+
+@@@note
+Ensure `Matchers` trait is imported via `import org.scalatest.matchers.should.Matchers` & not `import org.scalatest.matchers.must.Matchers`
+@@@
 
 Scala
 : @@snip [RaImplTest.scala](../../../../backend/src/test/scala/org/tmt/sample/core/RaImplTest.scala) { #raToString-impl-test }
 
-Try compiling code
+Lets now try to compile our code
 
 ```bash
 sbt:backend> compile
@@ -127,9 +129,9 @@ Add a placeholder for route
 override lazy val routes: Route = ???
 ```
 
-Go to `SampleRoute.scala`
-Delete existing route
-Add a placeholder for route
+* Go to `SampleRoute.scala`
+* Delete existing route
+* Add a placeholder for route
 
 ```scala
 val route: Route = ???
@@ -152,10 +154,10 @@ sbt:backend> testOnly org.tmt.sample.core.RaImplTest
 
 ### Add Route for our implementation
 
-We are using akka dsl to compose our http routes.
+We are using akka dsl to compose our http routes. visit [here](https://doc.akka.io/docs/akka-http/current/routing-dsl/overview.html) to learn more about routing dsl.
 
-Go to `SampleWiring.scala`
-Add `raImpl` reference
+* Go to `SampleWiring.scala`
+* Add `raImpl` reference
 
 Scala
 : @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/SampleWiring.scala) { #raImpl-ref }
@@ -171,7 +173,7 @@ Add dependency to `raImpl`
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #raImpl-ref }
 
-Add route
+Add route along with an implicit execution context which is provided by ServerWiring.
 
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-route }
@@ -191,8 +193,8 @@ SampleRoute should compile now successfully
 
 ### Add tests for newly added route
 
-Go to `SampleRouteTest.scala`
-Add raImpl mock
+* Go to `SampleRouteTest.scala`
+* Add raImpl mock
 
 Scala
 : @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-mock }
@@ -224,7 +226,7 @@ sbt:backend> test
 Start location service with authentication service (we will use auth in next section of tutorial)
 
 ```bash
-cs install csw-services:v3.0.0-M1
+cs install csw-services:v4.0.0-M1
 csw-services start -k 
 ```
 
@@ -237,7 +239,7 @@ sbt:backend> run start
 Update apptest.http and test your route
 
 ```bash
-#### Request to test greeting endpoint
+#### Request to test raValues endpoint
 POST http://192.168.1.4:8084/raValues
 Content-Type: application/json
 
@@ -251,38 +253,44 @@ You should receive response like
 
 ```bash
 {
-"formattedRa": "8h 8m 9.602487087684134s"
+  "id": "80ab3f42-a4cf-4249-b9a0-2b209aab48e8",
+  "formattedRa": "8h 8m 9.602487087684134s"
 }
 ```
 
 ## Consume route in frontend
 
-Go to `pages` folder in `src`
-Delete all component files under this directory
-Go to `pages` folder in `test`  
-Delete all test files under this directory
-Delete `Menu.tsx`, `Route.tsx`, `api.ts`
-Delete folder `form`
+In this section, we will be replacing the greeting component with a new react component (Ra).
+We will show how to create a client side route to add/render custom components within the application.
+
+First lets cleanup unwanted code
+
+* Go to `pages` folder in `src`
+* Delete all component files under this directory
+* Go to `pages` folder in `test`  
+* Delete all test files under this directory
+* Remove the contents of `api.ts` file
+* Delete folder `form`
 
 ### Add models
 
-Go to `Models.ts`
-Delete existing model interfaces Add our request and response models
+* Go to `Models.ts`
+* Delete existing model interfaces Add our request and response models
 
 Typescript
 : @@snip [Models.ts](../../../../frontend/src/models/Models.ts) { #add-models }
 
 ### Add Fetch
 
-Create `api.ts` in `utils` folder Implement method to fetch data from backend endpoint
+Implement the following method to fetch data from backend endpoint in `api.ts` file.
 
 Typescript
 : @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-data }
 
 ### Add our React component
 
-In `pages` folder create `Ra.tsx`
-Add a simple input form
+* In `pages` folder create `Ra.tsx`
+* Add a simple input form to the `Ra` react component
 
 Typescript
 : @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #add-component }
@@ -292,23 +300,43 @@ Typescript
 Typescript
 : @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #use-fetch }
 
-In `App.tsx` remove `<Routes />` and map our component to route
+You would require locationService instance for getting backend url. this instance is available via context named `LocationServiceProvider`.
+Add the following as first line inside the `Ra` component.
 
 Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #add-route }
+: @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #use-location-service-from-context }
 
-remove `<MenuBar/>` and add our route to menu item action
+update `Routes.tsx` and map our `Ra` component to `/` path.
 
 Typescript
-: @@snip [App.tsx](../../../../frontend/src/App.tsx) { #add-route-action }
+: @@snip [App.tsx](../../../../frontend/src/routes/Routes.tsx) { #add-route }
+
+update `MenuBar.tsx` and replace `Ra` route in the menu item action insted of `Home`.
+
+Typescript
+: @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-route-action }
+
+Now, we have linked all pieces of our frontend application.
+
+```bash
+$:frontend> npm start
+```
+
+Adding tests for UI components
 
 Add `Ra.test.tsx` in `test/pages`
 
 Typescript
 : @@snip [Ra.test.tsx](../../../../frontend/test/pages/Ra.test.tsx) { #add-test }
 
-Run frontend Application
+To run the test
 
 ```bash
-npm start
+$:frontend> npm run test
+```
+
+To build the application for its production deployment
+
+```bash
+$:frontend> npm run build
 ```
