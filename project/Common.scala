@@ -12,6 +12,7 @@ object Common {
   )
 
   lazy val CommonSettings: Seq[Setting[_]] = DocsSettings ++ Seq(
+    scalaVersion := "2.13.6",
     organization := "com.github.tmtsoftware.sample",
     organizationName := "TMT Org",
     concurrentRestrictions in Global += Tags.limit(Tags.All, 1),
