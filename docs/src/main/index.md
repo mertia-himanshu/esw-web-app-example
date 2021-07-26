@@ -2,8 +2,7 @@
 
 These are set of tutorials to create a Web Application using template
 
-
-@@toc { depth=1 } 
+@@toc { depth=1 }
 @@@ index
 
 - @ref:[Creating a Web Application](flows/base-flow.md)

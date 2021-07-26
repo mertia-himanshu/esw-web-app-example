@@ -2,7 +2,7 @@
 
 We will use postgres to save and use our data. We will be using Jooq dsl to write our queries.
 
-## Update backend Implementation 
+## Update backend Implementation
 
 Add db dependency in `Libs.scala`
 
@@ -13,7 +13,6 @@ Use db dependency in `build.sbt`
 
 Scala
 : @@snip [build.sbt](../../../../backend/build.sbt) { #add-db }
-
 
 Add dsl context in `RaImpl.scala`
 
@@ -34,7 +33,6 @@ Add new contract to for to get ra values in service `RaService.scala`
 
 Scala
 : @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #getRaValues-contract }
-
 
 Implement contract by adding a new method to get these saved db values in `RaImpl.scala`
 
@@ -60,26 +58,26 @@ Scala
 
 ## Database setup
 
-The CSW Database Service needs to be running before starting the App.    
+The CSW Database Service needs to be running before starting the App.
 Follow below instructions to run database service along with location service and authentication service:
 
-```
+```bash
 cs install csw-services:v3.0.0-M1
 csw-services start -k -d
 ```
 
 Login to your postgres with your default postgres user and create new user
 
-```
+```bash
 psql -d postgres
 postgres = > CREATE USER postgres with password 'postgres'
 ```
 
 This application performs fetch and insert queries on the `RAVLUES` table in the database, thus it needs to be
-present.     
+present.
 Following command can be used to create a table
 
-```
+```sql
 postgres = >
 CREATE TABLE RAVLUES(
 id TEXT             PRIMARY KEY     NOT NULL,
@@ -88,10 +86,10 @@ formattedRa TEXT                    NOT NULL
 ```
 
 In the application, we depend on environment variables to pick up your username and password for the database, thus DB_USERNAME and
-DB_PASSWORD need to be set.    
+DB_PASSWORD need to be set.
 To set environment variables, use the command
 
-```
+```bash
 export DB_USERNAME=<VALUE> DB_PASSWORD=<VALUE>
 ```
 
@@ -103,16 +101,15 @@ Scala
 
 Run backend application
 
-```
+```sbt
 sbt:backend> run start
 ```
 
 Add this to your apptest.http and check the route
-```
+
+```http
 GET http://192.168.1.4:8084/raValues
 ```
-
-
 
 ## Update frontend
 
@@ -141,18 +138,8 @@ Update our `Ra.tsx` component to display table also
 Typescript
 : @@snip [Ra.tsx](../../../../frontend/src/db/Ra.tsx) { #add-table }
 
-
 Run frontend Application
 
-```
+```bash
 npm start
 ```
-
-
-
-
-
-
-
-
-
