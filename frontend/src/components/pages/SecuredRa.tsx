@@ -3,7 +3,7 @@ import React from 'react'
 import { useLocationService } from '../../contexts/LocationServiceContext'
 import { useAuth } from '../../hooks/useAuth'
 import type { RaRequest } from '../../models/Models'
-import { fetchSecuredRa } from '../../utils/api'
+import { fetchSecuredRaValues } from '../../utils/api'
 import { errorMessage } from '../../utils/message'
 import { getBackendUrl } from '../../utils/resolveBackend'
 
@@ -21,7 +21,11 @@ export const SecuredRa = (): JSX.Element => {
       if (!token) {
         errorMessage('Failed to greet user: Unauthenticated request')
       } else {
-        const response = await fetchSecuredRa(backendUrl, valueInDecimal, token)
+        const response = await fetchSecuredRaValues(
+          backendUrl,
+          valueInDecimal,
+          token
+        )
         if (response?.formattedRa) console.log(response.formattedRa)
         else {
           console.error(response)

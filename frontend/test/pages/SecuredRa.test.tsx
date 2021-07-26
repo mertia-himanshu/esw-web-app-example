@@ -47,7 +47,7 @@ describe('SecuredRa', () => {
 
     verify(locationServiceMock.find(deepEqual(connection))).called()
     const [firstArg, secondArg] = capture(fetch).last()
-    expect(firstArg).to.equal(httpLocation.uri + 'securedFormattedRa')
+    expect(firstArg).to.equal(httpLocation.uri + 'securedRaValues')
 
     const expectedReq = {
       method: 'POST',

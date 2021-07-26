@@ -4,6 +4,7 @@ export interface RaRequest {
 }
 
 export interface RaResponse {
+  id: string
   formattedRa: string
 }
 // #add-models

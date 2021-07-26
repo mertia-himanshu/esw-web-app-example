@@ -1,7 +1,11 @@
 #### Request to test greeting endpoint
-POST http://192.168.1.4:8084/formattedRa
+POST http://192.168.1.4:8084/raValues
 Content-Type: application/json
 
 {
   "raInDecimals": 2.13
 }
+
+
+###
+GET http://192.168.1.4:8084/raValues

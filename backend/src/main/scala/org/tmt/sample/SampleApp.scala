@@ -3,10 +3,10 @@ package org.tmt.sample
 import caseapp.core.RemainingArgs
 import csw.location.api.models.Metadata
 import esw.http.template.wiring.ServerApp
-import SampleAppCommand.StartCommand
+import org.tmt.sample.SampleAppCommand.StartCommand
 
 object SampleApp extends ServerApp[SampleAppCommand] {
-  override def appName: String    = getClass.getSimpleName.dropRight(1)
+  override def appName: String = getClass.getSimpleName.dropRight(1)
 
   override def run(command: SampleAppCommand, remainingArgs: RemainingArgs): Unit =
     command match {

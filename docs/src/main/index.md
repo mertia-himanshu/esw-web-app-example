@@ -2,7 +2,6 @@
 
 These are set of tutorials to create a Web Application using template
 
-## Contents
 
 @@toc { depth=1 } 
 @@@ index

@@ -12,6 +12,9 @@ lazy val `backend` = project
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Seq(
       Libs.`esw-http-template-wiring` % "compile->compile;test->test",
+      // #add-db
+      Libs.`csw-database`,
+      // #add-db
       Libs.`embedded-keycloak`        % Test,
       Libs.`scalatest`                % Test,
       Libs.`akka-http-testkit`        % Test,
@@ -19,7 +22,8 @@ lazy val `backend` = project
       Libs.`akka-actor-testkit-typed` % Test,
       Libs.`akka-stream-testkit`      % Test
     ),
-    Test / fork := true
+    fork := true,
+    Test / fork := false
   )
 
 lazy val `ignore` = project.in(file(".ignore"))

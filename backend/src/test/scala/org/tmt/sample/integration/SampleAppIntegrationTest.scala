@@ -61,37 +61,37 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
   "SampleWiring" must {
 
     // #add-route-test
-    "call formattedRa and receive Response" in {
+    "call raValues and receive Response" in {
       val raRequest = RaRequest(2.13)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "formattedRa"),
+        uri = appUri.withPath(Path / "raValues"),
         entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
       )
 
       val response: HttpResponse = Http().singleRequest(request).futureValue
       response.status should ===(StatusCode.int2StatusCode(200))
-      Unmarshal(response).to[RaResponse].futureValue should ===(
-        RaResponse("8h 8m 9.602487087684134s")
+      Unmarshal(response).to[RaResponse].futureValue.formattedRa should ===(
+        "8h 8m 9.602487087684134s"
       )
     }
     // #add-route-test
 
     // #add-secured-route-test
-    "call securedFormattedRa and receive valid response when user have required role" in {
+    "call securedRaValues and receive valid response when user have required role" in {
       val token     = getToken("admin", "password1")()
       val raRequest = RaRequest(2.13)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "securedFormattedRa"),
+        uri = appUri.withPath(Path / "securedRaValues"),
         headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
         entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
       )
 
       val response: HttpResponse = Http().singleRequest(request).futureValue
       response.status should ===(StatusCode.int2StatusCode(200))
-      Unmarshal(response).to[RaResponse].futureValue should ===(
-        RaResponse("8h 8m 9.602487087684134s")
+      Unmarshal(response).to[RaResponse].futureValue.formattedRa should ===(
+        "8h 8m 9.602487087684134s"
       )
     }
     // #add-secured-route-test
@@ -102,7 +102,7 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
       val raRequest = RaRequest(2.13)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "securedFormattedRa"),
+        uri = appUri.withPath(Path / "securedRaValues"),
         headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
         entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
       )

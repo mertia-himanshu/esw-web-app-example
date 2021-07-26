@@ -19,6 +19,8 @@ import org.tmt.sample.TestHelper
 import org.tmt.sample.core.RaImpl
 import org.tmt.sample.core.models.{RaRequest, RaResponse}
 
+import scala.concurrent.Future
+
 class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpCompat with BeforeAndAfterEach with HttpCodecs {
 
   // #add-mock
@@ -36,12 +38,12 @@ class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpC
 
   "SampleRoute" must {
     // #add-route-test
-    "call raToString on formattedRa route" in {
-      val response  = RaResponse("some-value")
+    "call raToString on raValues post route" in {
+      val response  = RaResponse("id1", "some-value")
       val raRequest = RaRequest(2.13)
-      when(service1.raToString(raRequest)).thenReturn(response)
+      when(service1.raToString(raRequest)).thenReturn(Future.successful(response))
 
-      Post("/formattedRa", raRequest) ~> route ~> check {
+      Post("/raValues", raRequest) ~> route ~> check {
         verify(service1).raToString(raRequest)
         responseAs[RaResponse] should ===(response)
       }
@@ -49,14 +51,14 @@ class SampleRouteTest extends AnyWordSpec with ScalatestRouteTest with AkkaHttpC
     // #add-route-test
 
     // #add-secured-route-test
-    "call raToString on securedFormattedRa route with access token" in {
-      val response  = RaResponse("some-value")
+    "call raToString on securedRaValues post route with some access token" in {
+      val response  = RaResponse("id1", "some-value")
       val raRequest = RaRequest(2.13)
       val policy    = RealmRolePolicy("Esw-user")
       when(securityDirectives.sPost(policy)).thenReturn(accessTokenDirective)
-      when(service1.raToString(raRequest)).thenReturn(response)
+      when(service1.raToString(raRequest)).thenReturn(Future.successful(response))
 
-      Post("/securedFormattedRa", raRequest) ~> route ~> check {
+      Post("/securedRaValues", raRequest) ~> route ~> check {
         verify(service1).raToString(raRequest)
         verify(securityDirectives).sPost(policy)
         responseAs[RaResponse] should ===(response)
