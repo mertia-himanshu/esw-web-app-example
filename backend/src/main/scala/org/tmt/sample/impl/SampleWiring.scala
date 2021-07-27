@@ -1,8 +1,7 @@
-package org.tmt.sample
+package org.tmt.sample.impl
 
 import akka.http.scaladsl.server.Route
 import esw.http.template.wiring.ServerWiring
-import org.tmt.sample.core.RaImpl
 import org.tmt.sample.http.SampleRoute
 
 class SampleWiring(val port: Option[Int]) extends ServerWiring {
@@ -12,11 +11,8 @@ class SampleWiring(val port: Option[Int]) extends ServerWiring {
   lazy val raImpl = new RaImpl()
   // #raImpl-ref
 
-  
   // #add-route
   import actorRuntime.ec
   override lazy val routes: Route = new SampleRoute(raImpl, securityDirectives).route
   // #add-route
-
-  logger.info(s"Successfully stared the backend server")
 }

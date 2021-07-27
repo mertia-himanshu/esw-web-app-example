@@ -16,15 +16,18 @@ class SampleRoute(raService: RaService, securityDirectives: SecurityDirectives)(
 //#raImpl-ref
 
   val route: Route = {
-    // #add-route
+    // #add-routes
     path("raValues") {
       post {
         entity(as[RaRequest]) { raRequest =>
           complete(raService.raToString(raRequest))
         }
+      } ~
+      get {
+        complete(raService.getRaValues)
       }
     } ~
-    // #add-route
+    // #add-routes
     // #add-secured-route
     path("securedRaValues") {
       post {
@@ -34,14 +37,7 @@ class SampleRoute(raService: RaService, securityDirectives: SecurityDirectives)(
           }
         }
       }
-    } ~
-    // #add-secured-route
-    // #add-get-values-route
-    path("raValues") {
-      get {
-        complete(raService.getRaValues)
-      }
     }
-    // #add-get-values-route
+    // #add-secured-route
   }
 }

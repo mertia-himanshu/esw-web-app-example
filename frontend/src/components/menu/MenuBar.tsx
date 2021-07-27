@@ -13,23 +13,23 @@ export const MenuBar = (): JSX.Element => {
 
   return (
     <>
-    {/*// #add-route-action */}
-    <Menu mode='horizontal'>
-      <Menu.Item key='ra'>
-        <Link to='/'>Ra</Link>
-      </Menu.Item>
       {/*// #add-route-action */}
-      {/*// #add-protected-route-action */}
-      <Menu.Item key='securedRa'>
-        <Link to='/securedRa'>SecuredRa</Link>
-      </Menu.Item>
-      {/*// #add-protected-route-action */}
-      {/*// #add-login-logout */}
-      {isAuthenticated ? <Logout logout={logout} /> : <Login login={login} />}
-      {/*// #add-login-logout */}
-     {/*// #add-route-action */}
-    </Menu>
-     {/*// #add-route-action */}
+      <Menu mode='horizontal'>
+        <Menu.Item key='ra'>
+          <Link to='/'>Ra</Link>
+        </Menu.Item>
+        {/*// #add-route-action */}
+        {/*// #add-protected-route-action */}
+        <Menu.Item key='securedRa'>
+          <Link to='/securedRa'>SecuredRa</Link>
+        </Menu.Item>
+        {/*// #add-protected-route-action */}
+        {/*// #add-login-logout */}
+        {isAuthenticated ? <Logout logout={logout} /> : <Login login={login} />}
+        {/*// #add-login-logout */}
+        {/*// #add-route-action */}
+      </Menu>
+      {/*// #add-route-action */}
     </>
   )
 }

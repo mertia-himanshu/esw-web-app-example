@@ -1,43 +1,14 @@
-import { Button, Form, Input } from 'antd'
 import React from 'react'
-import { useLocationService } from '../../contexts/LocationServiceContext'
-import type { RaRequest } from '../../models/Models'
-import { fetchRaValues } from '../../utils/api'
-import { getBackendUrl } from '../../utils/resolveBackend'
-  // #add-component
-  // #use-location-service-from-context
-export const Ra = (): JSX.Element => {
-  // #add-component
-  const locationService = useLocationService()
-  // #use-location-service-from-context
+import { RaInput } from './RaInput'
+import { RaTable } from './RaTable'
 
-  // #use-fetch
-  const onFinish = async (values: RaRequest) => {
-    const backendUrl = await getBackendUrl(locationService)
-    const valueInDecimal = { raInDecimals: Number(values.raInDecimals) }
-    if (backendUrl) {
-      const response = await fetchRaValues(backendUrl, valueInDecimal)
-      if (response?.formattedRa) {
-        console.log(response.formattedRa)
-      } else {
-        console.error(response)
-        throw new Error('Invalid response, formattedRa field is missing')
-      }
-    }
-  }
-  // #use-fetch
 // #add-component
+export const Ra = (): JSX.Element => {
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item label='RaInDecimals' name='raInDecimals'>
-        <Input role='RaInDecimals' />
-      </Form.Item>
-      <Form.Item>
-        <Button type='primary' htmlType='submit' role='Submit'>
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <>
+      <RaInput />
+      <RaTable />
+    </>
   )
 }
- // #add-component
+// #add-component

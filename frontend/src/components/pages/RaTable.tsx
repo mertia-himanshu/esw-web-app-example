@@ -3,7 +3,7 @@ import type { ColumnsType } from 'antd/lib/table'
 import React, { useEffect, useState } from 'react'
 import { useLocationService } from '../../contexts/LocationServiceContext'
 import type { RaResponse } from '../../models/Models'
-import { fetchSavedRaValues } from '../../utils/api'
+import { getRaValues } from '../../utils/api'
 import { errorMessage } from '../../utils/message'
 import { getBackendUrl } from '../../utils/resolveBackend'
 
@@ -34,7 +34,7 @@ export const RaTable = (): JSX.Element => {
     async function fetchRaValues() {
       const backendUrl = await getBackendUrl(locationService)
       if (backendUrl) {
-        const raValues = await fetchSavedRaValues(backendUrl)
+        const raValues = await getRaValues(backendUrl)
         console.error('raValues', raValues)
         setRaValues(raValues)
       } else {
@@ -57,5 +57,4 @@ export const RaTable = (): JSX.Element => {
   )
   // #add-component
   // #use-fetch
-
 }

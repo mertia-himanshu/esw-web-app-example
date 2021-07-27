@@ -19,9 +19,9 @@ import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, Client, Realm}
 import org.tmt.embedded_keycloak.impl.StopHandle
 import org.tmt.embedded_keycloak.utils.BearerToken
 import org.tmt.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
-import org.tmt.sample.SampleWiring
 import org.tmt.sample.core.models.{RaRequest, RaResponse}
 import org.tmt.sample.http.HttpCodecs
+import org.tmt.sample.impl.SampleWiring
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext}

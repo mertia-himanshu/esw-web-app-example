@@ -4,6 +4,7 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.tmt.sample.core.models.RaRequest
+import org.tmt.sample.impl.RaImpl
 // #raToString-impl-test
 class RaImplTest extends AnyWordSpec with Matchers {
   "RaImpl" must {

@@ -16,8 +16,8 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatest.wordspec.AnyWordSpec
 import org.tmt.sample.TestHelper
-import org.tmt.sample.core.RaImpl
 import org.tmt.sample.core.models.{RaRequest, RaResponse}
+import org.tmt.sample.impl.RaImpl
 
 import scala.concurrent.Future
 

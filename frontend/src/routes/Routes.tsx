@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { NotFound } from '../components/error/NotFound'
+import { Ra } from '../components/pages/Ra'
 import { SecuredRa } from '../components/pages/SecuredRa'
-import { Ra } from '../db/Ra'
 import { ProtectedRoute } from './ProtectedRoute'
 
 export const Routes = (): JSX.Element => {

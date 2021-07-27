@@ -2,7 +2,7 @@ import type { RaRequest, RaResponse } from '../models/Models'
 import { get, post } from './Http'
 
 // #fetch-data
-export const fetchRaValues = async (
+export const postRaValues = async (
   baseUrl: string,
   raRequest: RaRequest
 ): Promise<RaResponse | undefined> =>
@@ -11,7 +11,7 @@ export const fetchRaValues = async (
 // #fetch-data
 
 // #secured-fetch-data
-export const fetchSecuredRaValues = async (
+export const securedPostRaValues = async (
   baseUrl: string,
   raRequest: RaRequest,
   token: string
@@ -24,7 +24,7 @@ export const fetchSecuredRaValues = async (
 // #secured-fetch-data
 
 // #fetch-saved-ra-values
-export const fetchSavedRaValues = async (
+export const getRaValues = async (
   baseUrl: string
 ): Promise<RaResponse[] | undefined> =>
   (await get<RaResponse[]>(baseUrl + 'raValues')).parsedBody

@@ -2,18 +2,18 @@
 
 ## Overview
 
-This template contains steps to create an example application using the template
+This template contains steps to create an example application using the template.
 It has three sections:
 
 * Basic flow - Creating a Web Application
 * Adding Authentication
 * Adding Persistence
 
-Basic flow will show you how to add a route to backend application and consume it in your frontend.
+Basic flow will show you how to add a routes to backend application and consume them in your frontend.
 Next two sections are extensions, if you need to add authentication in your application or
 if you need to save your data to a database.
 
-At any point in time you want to see code with complete file, you can refer fiinal [example app](https://github.com/mertia-himanshu/sample) and compare your changes.
+At any point in time if you want to see code with complete file, you can refer final [example app](https://github.com/mertia-himanshu/sample) and compare your changes.
 
 ---
 
@@ -43,7 +43,7 @@ npm run build
 ## Compile backend
 
 This is where your backend application is present, it uses Scala ecosystem.
-Make sure [coursier](https://get-coursier.io/docs/sbt-coursier), openjdk 11 and latest sbt version is installed in your machine.
+Make sure [coursier](https://tmtsoftware.github.io/csw/apps/csinstallation.html), openjdk 11 and latest sbt version is installed in your machine.
 Let's compile our generated application.
 
 ```bash
@@ -52,7 +52,7 @@ sbt
 sbt:backend> compile
 ```
 
-## Add route to backend
+## Add routes to backend
 
 Open backend folder in you editor(e.g. Intellij)
 e.g.
@@ -72,7 +72,7 @@ Generated code contains a sample application, we will delete its code and add ou
 * Remove existing tests
 * Remove any references to deleted classes
 * Go to `SampleAppIntegrationTest.scala`
-Remove existing tests
+* Remove existing tests
 
 ### Add our Models classes
 
@@ -90,21 +90,31 @@ Add `RaResponse.scala` model class
 Scala
 : @@snip [RaResponse.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaResponse.scala) { #response-model }
 
-### Add our custom implementation for method `raToString` and write test for it
+### Add our implementation
 
-* Add contract
+* Add `raToString` contract in service `RaService.scala`
 * Go to `src`, add package folder with name `service`
 * Add a scala trait in `RaService.scala` file and add our `raToString` contract, using our request and response model  
 
 Scala
 : @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #raToString-contract }
 
-* Go to `core` in `src`
-* Add `RaImpl.scala`  
-* Extend `RaService.scala` to implement `raToString` contract
+Add `getRaValues` contract in service `RaService.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/core/RaImpl.scala) { #raToString-impl }
+: @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #getRaValues-contract }
+
+* Go to `impl` package in `src`
+* Add `RaImpl.scala`
+* Extend `RaService.scala` to implement `raToString`
+
+Scala
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaImpl.scala) { #raToString-impl }
+
+Implement `getRaValues` contract in `RaImpl.scala`
+
+Scala
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaImpl.scala) { #getRaValues-impl }
 
 * Add `RaImplTest.scala` in corresponding `test` directory
 * Implement test `convert Ra to String`
@@ -158,12 +168,12 @@ sbt:backend> testOnly org.tmt.sample.core.RaImplTest
 * Add `raImpl` reference
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/SampleWiring.scala) { #raImpl-ref }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/SampleWiring.scala) { #raImpl-ref }
 
 Add Route in placeholder
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/SampleWiring.scala) { #add-route }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/SampleWiring.scala) { #add-route }
 
 * Go to `SampleRoute.scala`
 * Add dependency of `raService` to `SampleRoute`
@@ -176,7 +186,7 @@ Add route along with an implicit execution context which is provided by ServerWi
 We are using akka routing dsl to compose our http routes. visit [here](https://doc.akka.io/docs/akka-http/current/routing-dsl/overview.html) to learn more about routing dsl.
 
 Scala
-: @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-route }
+: @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-routes }
 
 @@@note
 The tilda (~) at the end, is used as a path concatenator in akka dsl.
@@ -246,11 +256,13 @@ Try running our backend application
 sbt:backend> run start
 ```
 
-Update apptest.http and test your route
+If application is successfully started it, will show log with `server_ip` and `app_port` registered to location service.
+
+Update `apptest.http` and test your `raValues` POST route
 
 ```bash
 #### Request to test raValues endpoint
-POST http://192.168.1.4:8084/raValues
+POST http://<server_ip>:<app_port>/raValues
 Content-Type: application/json
 
 {
@@ -259,7 +271,7 @@ Content-Type: application/json
 
 ```
 
-Successfull response contains the formattedRa value with a unique id.
+Successful response contains the formattedRa value with a unique id.
 
 ```bash
 {
@@ -268,9 +280,26 @@ Successfull response contains the formattedRa value with a unique id.
 }
 ```
 
-## Consume route in frontend
+Add this to your `apptest.http` and test your `raValues` GET route
 
-In this section, we will be replacing the greeting component with a new react component (Ra).
+```http
+GET http://<server_ip>:<app_port>/raValues
+```
+
+Successful response contains list of with formattedRa value.
+
+```bash
+[
+  {
+    "id": "d6a16719-72bf-4928-8bf3-abb125186f49",
+    "formattedRa": "8h 8m 9.602487087684134s"
+  }
+]
+```
+
+## Consume routes in frontend
+
+In this section, we will be replacing the greeting component with a new React component (Ra).
 We will show how to create a client side route to add/render custom components within the application.
 
 First lets cleanup unwanted code
@@ -292,29 +321,57 @@ Typescript
 
 ### Add Fetch
 
-Implement the following method to fetch data from backend endpoint in `api.ts` file.
+Implement the following methods to consume data from our POST and GET routes in `api.ts` file.
+
+For POST Route
 
 Typescript
 : @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-data }
 
+For GET Route
+
+Typescript
+: @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-saved-ra-values }
+
+
 ### Add our React component
 
-* In `pages` folder create `Ra.tsx`
-* Add a simple input form to the `Ra` react component
+* In `pages` folder, create `RaInput.tsx`
+* Add a simple input form to the `RaInput` react component
+
+Typescript
+: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #add-component }
+
+Use `postRaValues` method in our component
+
+Typescript
+: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #use-fetch }
+
+You would require locationService instance for getting backend url. This instance is available via context named `LocationServiceProvider`.
+Add the following as first line inside the `RaInput` component.
+
+Typescript
+: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #use-location-service-from-context }
+
+* In `pages` folder ,Add new component `RaTable.tsx` to display ra values table
+
+Typescript
+: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-component }
+
+Add columns for the table in this component
+
+Typescript
+: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-columns }
+
+Use our `getRaValues` method in this component
+
+Typescript
+: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #use-fetch }
+
+* In `pages` folder ,Add new component `Ra.tsx` to compose above created components and display in a page
 
 Typescript
 : @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #add-component }
-
-### Use fetch in our component
-
-Typescript
-: @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #use-fetch }
-
-You would require locationService instance for getting backend url. this instance is available via context named `LocationServiceProvider`.
-Add the following as first line inside the `Ra` component.
-
-Typescript
-: @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #use-location-service-from-context }
 
 Next, we need to show our newly created `Ra` component.
 
@@ -325,7 +382,7 @@ Typescript
 
 Now, we need a link to let user navigate to `Ra` form from different parts of application.
 
-Update `MenuBar.tsx` and replace `Ra` route in the menu item action insted of `Home`.
+Update `MenuBar.tsx` and replace `Ra` route in the menu item action instead of `Home`.
 
 Typescript
 : @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-route-action }
@@ -338,10 +395,10 @@ $:frontend> npm start
 
 Adding tests for UI components
 
-Add `Ra.test.tsx` in `test/pages`
+Add `RaInput.test.tsx` in `test/pages`
 
 Typescript
-: @@snip [Ra.test.tsx](../../../../frontend/test/pages/Ra.test.tsx) { #add-test }
+: @@snip [RaInput.test.tsx](../../../../frontend/test/pages/RaInput.test.tsx) { #add-test }
 
 To run the test
 
@@ -354,3 +411,8 @@ To build the application for its production deployment
 ```bash
 $:frontend> npm run build
 ```
+
+It will launch application in Browser with an input form.
+* Add a value like '2.13' and click submit. 
+* Refresh page
+* You will see formatted ra value in table below the input form.

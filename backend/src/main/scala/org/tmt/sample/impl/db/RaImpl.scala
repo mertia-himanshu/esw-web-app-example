@@ -1,4 +1,4 @@
-package org.tmt.sample.db
+package org.tmt.sample.impl.db
 
 import csw.database.scaladsl.JooqExtentions.{RichQuery, RichResultQuery}
 import csw.params.core.models.Angle

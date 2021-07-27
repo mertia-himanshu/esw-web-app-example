@@ -65,87 +65,38 @@ Scala
 Add dsl context provided by CSW Database package in `RaImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/db/RaImpl.scala) { #add-dsl-context }
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #add-dsl-context }
 
 We can now update our previous implementation to make use of database.
 Add a query to insert data in db in `RaImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/db/RaImpl.scala) { #insert-raValue-in-db }
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #insert-raValue-in-db }
 
 Update `raToString` implementation to use this query in `RaImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/db/RaImpl.scala) { #raToString-impl }
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #raToString-impl }
 
-Add new contract to for to get ra values in service `RaService.scala`
-
-Scala
-: @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #getRaValues-contract }
-
-Implement contract by adding a new method to get these saved db values in `RaImpl.scala`
+Update `getRaValues` implementation in `RaImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/db/RaImpl.scala) { #get-raValues-from-db }
-
-Add new route to get saved values in `SampleRoute.scala`
-
-Scala
-: @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-get-values-route }
+: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #get-raValues-from-db }
 
 Update `SampleWiring.scala`
 
 Add db setup in `SampleWiring.scala`
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/db/SampleWiring.scala) { #db-wiring-setup }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #db-wiring-setup }
 
 Update implementation to use dsl context
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/db/SampleWiring.scala) { #raImpl-db-ref }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #raImpl-db-ref }
 
 Run backend application
 
 ```sbt
 sbt:backend> run start
-```
-
-Add this to your apptest.http and check the route
-
-```http
-GET http://192.168.1.4:8084/raValues
-```
-
-## Update frontend
-
-Add fetch method to data saved ra values in `api.ts`
-
-Typescript
-: @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-saved-ra-values }
-
-Add new component `RaTable.tsx` to display ra values table
-
-Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-component }
-
-Add columns for the table in this component
-
-Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-columns }
-
-Use our new fetch method in this component
-
-Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #use-fetch }
-
-Update our `Ra.tsx` component to display table also
-
-Typescript
-: @@snip [Ra.tsx](../../../../frontend/src/db/Ra.tsx) { #add-table }
-
-Run frontend Application
-
-```bash
-npm start
 ```

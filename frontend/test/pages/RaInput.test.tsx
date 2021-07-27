@@ -5,15 +5,14 @@ import { HttpConnection, HttpLocation, Prefix } from '@tmtsoftware/esw-ts'
 import { expect } from 'chai'
 import React from 'react'
 import { anything, capture, deepEqual, verify, when } from 'ts-mockito'
-import { Ra } from '../../src/components/pages/Ra'
+import { RaInput } from '../../src/components/pages/RaInput'
 import {
   locationServiceMock,
   mockFetch,
   renderWithRouter
 } from '../utils/test-utils'
 
-
-describe('Ra', () => {
+describe('RaInput', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 
   const httpLocation: HttpLocation = {
@@ -34,7 +33,7 @@ describe('Ra', () => {
 
     when(fetch(anything(), anything())).thenResolve(response)
 
-    renderWithRouter(<Ra />)
+    renderWithRouter(<RaInput />)
 
     const input = (await screen.findByRole('RaInDecimals')) as HTMLInputElement
 

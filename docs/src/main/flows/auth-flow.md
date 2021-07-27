@@ -10,11 +10,6 @@ We have set up some [sample users](https://tmtsoftware.github.io/csw/apps/cswser
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-secured-route }
 
-@@@note
-The tilda (~) at the end, is used as a path concatenator in akka dsl.
-You can safely remove it for now. However, in the following section of this tutorial we are going to add new routes to this file, at that point you would want to add it again to concat multiple routes.
-@@@
-
 ### Add test for newly added route
 
 Add test in `SampleRouteTest.scala` for protected route

@@ -1,7 +1,8 @@
-package org.tmt.sample.db
+package org.tmt.sample.impl.db
 
 import akka.http.scaladsl.server.Route
 import csw.database.DatabaseServiceFactory
+import csw.network.utils.SocketUtils
 import esw.http.template.wiring.ServerWiring
 import org.jooq.DSLContext
 import org.tmt.sample.http.SampleRoute
@@ -28,8 +29,6 @@ class SampleWiring(val port: Option[Int]) extends ServerWiring {
   // #raImpl-db-ref
   lazy val raImpl = new RaImpl(dslContext)
   // #raImpl-db-ref
-
-  logger.info(s"Successfully stared the backend server")
 
   // #add-route
   override lazy val routes: Route = new SampleRoute(raImpl, securityDirectives).route
