@@ -4,8 +4,8 @@ import org.tmt.sample.core.models.{RaRequest, RaResponse}
 
 import scala.concurrent.Future
 
-trait RaService {
   // #raToString-contract
+trait RaService {
   def raToString(raRequest: RaRequest): Future[RaResponse]
   // #raToString-contract
 
@@ -13,4 +13,6 @@ trait RaService {
   def getRaValues: Future[List[RaResponse]]
   // #getRaValues-contract
 
+  // #raToString-contract
 }
+  // #raToString-contract

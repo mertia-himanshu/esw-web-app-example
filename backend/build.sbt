@@ -10,12 +10,12 @@ lazy val `backend` = project
     ),
     name := "backend",
     resolvers += "jitpack" at "https://jitpack.io",
+     // #add-db
     libraryDependencies ++= Seq(
       Libs.`esw-http-template-wiring` % "compile->compile;test->test",
-      // #add-db
-      Libs.`csw-database`,
-      // #add-db
+      Libs.`csw-database`, // <---
       Libs.`embedded-keycloak`        % Test,
+      // #add-db
       Libs.`scalatest`                % Test,
       Libs.`akka-http-testkit`        % Test,
       Libs.`mockito-scala`            % Test,

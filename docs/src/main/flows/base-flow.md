@@ -122,8 +122,8 @@ Lets now try to compile our code
 sbt:backend> compile
 ```
 
-It will give compilation errors hence, delete references to earlier deleted classes from `SampleWiring.scala`
-Add a placeholder for route
+* It will give compilation errors hence, delete references to earlier deleted classes from `SampleWiring.scala`
+* Add a placeholder for route
 
 ```scala
 override lazy val routes: Route = ???
@@ -154,8 +154,6 @@ sbt:backend> testOnly org.tmt.sample.core.RaImplTest
 
 ### Add Route for our implementation
 
-We are using akka dsl to compose our http routes. visit [here](https://doc.akka.io/docs/akka-http/current/routing-dsl/overview.html) to learn more about routing dsl.
-
 * Go to `SampleWiring.scala`
 * Add `raImpl` reference
 
@@ -167,16 +165,23 @@ Add Route in placeholder
 Scala
 : @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/SampleWiring.scala) { #add-route }
 
-Go to `SampleRoute.scala`
-Add dependency to `raImpl`
+* Go to `SampleRoute.scala`
+* Add dependency of `raService` to `SampleRoute`
 
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #raImpl-ref }
 
 Add route along with an implicit execution context which is provided by ServerWiring.
 
+We are using akka routing dsl to compose our http routes. visit [here](https://doc.akka.io/docs/akka-http/current/routing-dsl/overview.html) to learn more about routing dsl.
+
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-route }
+
+@@@note
+The tilda (~) at the end, is used as a path concatenator in akka dsl.
+You can safely remove it for now. However, in the following section of this tutorial we are going to add new routes to this file, at that point you would want to add it again to concat multiple routes.
+@@@
 
 After we add the route, we need to add the codec to serialize/deserialize our request/response
 
@@ -206,11 +211,16 @@ Scala
 
 Lets implement route test
 
+* Go to `SampleRouteTest.scala`
+* Add following test for our route
+
 Scala
 : @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-route-test }
 
-Go to `SampleAppIntegrationTest.scala`
-Add integration test for our route
+Lets implement integration test
+
+* Go to `SampleAppIntegrationTest.scala`
+* Add integration test for our route
 
 Scala
 : @@snip [SampleAppIntegrationTest.scala](../../../../backend/src/test/scala/org/tmt/sample/integration/SampleAppIntegrationTest.scala) { #add-route-test }
@@ -249,7 +259,7 @@ Content-Type: application/json
 
 ```
 
-You should receive response like
+Successfull response contains the formattedRa value with a unique id.
 
 ```bash
 {
@@ -306,12 +316,16 @@ Add the following as first line inside the `Ra` component.
 Typescript
 : @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #use-location-service-from-context }
 
-update `Routes.tsx` and map our `Ra` component to `/` path.
+Next, we need to show our newly created `Ra` component.
+
+Update `Routes.tsx` file and map our new created `Ra` component to `/` path.
 
 Typescript
 : @@snip [App.tsx](../../../../frontend/src/routes/Routes.tsx) { #add-route }
 
-update `MenuBar.tsx` and replace `Ra` route in the menu item action insted of `Home`.
+Now, we need a link to let user navigate to `Ra` form from different parts of application.
+
+Update `MenuBar.tsx` and replace `Ra` route in the menu item action insted of `Home`.
 
 Typescript
 : @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-route-action }

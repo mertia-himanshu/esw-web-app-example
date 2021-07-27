@@ -11,8 +11,8 @@ Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-secured-route }
 
 @@@note
-tilda (~) is used as a path concatenator in akka dsl.
-You can safely remove it for now. However, in the following section of this tutorial we are going to add new routes to this file. you can add it again.
+The tilda (~) at the end, is used as a path concatenator in akka dsl.
+You can safely remove it for now. However, in the following section of this tutorial we are going to add new routes to this file, at that point you would want to add it again to concat multiple routes.
 @@@
 
 ### Add test for newly added route
@@ -38,14 +38,14 @@ Scala
 
 ### Add secured Fetch
 
-Add the following method in `api.ts` which post request to `/securedRaValues` backend route.
+Add the following method in `api.ts` which sends request to `/securedRaValues` backend route.
 
 Typescript
 : @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #secured-fetch-data }
 
 ### Add our React component to consume secured fetch
 
-* In `pages` folder create `SecuredRa.tsx`
+* In `pages` folder create a file named `SecuredRa.tsx`
 * Add the following form to the `SecuredRa` react component
 
 Typescript
@@ -79,6 +79,8 @@ Add `SecuredRa.test.tsx` in `test/pages`
 
 Typescript
 : @@snip [SecuredRa.test.tsx](../../../../frontend/test/pages/SecuredRa.test.tsx) { #add-test }
+
+### Add Login & Logout functionality
 
 Make use of generated `Login` and `Logout` components .
 

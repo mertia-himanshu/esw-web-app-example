@@ -8,7 +8,6 @@ import { errorMessage } from '../../utils/message'
 import { getBackendUrl } from '../../utils/resolveBackend'
 
 //  #add-columns
-
 const HeaderTitle = ({ title }: { title: string }): JSX.Element => (
   <Typography.Title level={5} style={{ marginBottom: 0 }}>
     {title}
@@ -22,13 +21,15 @@ const columns: ColumnsType<RaResponse> = [
     key: 'formattedRa'
   }
 ]
-//  #add-columns
+// #add-columns
 
+// #use-fetch
+// #add-component
 export const RaTable = (): JSX.Element => {
+  // #add-component
   const locationService = useLocationService()
   const [raValues, setRaValues] = useState<RaResponse[]>()
 
-  //  #use-fetch
   useEffect(() => {
     async function fetchRaValues() {
       const backendUrl = await getBackendUrl(locationService)
@@ -43,7 +44,6 @@ export const RaTable = (): JSX.Element => {
 
     fetchRaValues()
   }, [])
-  // #use-fetch
 
   // #add-component
   return (
@@ -56,4 +56,6 @@ export const RaTable = (): JSX.Element => {
     />
   )
   // #add-component
+  // #use-fetch
+
 }

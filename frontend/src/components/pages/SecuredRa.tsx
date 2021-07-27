@@ -11,8 +11,8 @@ import { getBackendUrl } from '../../utils/resolveBackend'
 export const SecuredRa = (): JSX.Element => {
    // #add-component
   const locationService = useLocationService()
-  const { auth } = useAuth()
   // #use-location-service-from-context
+  const { auth } = useAuth()
 
   // #use-fetch
   const onFinish = async (values: RaRequest) => {
