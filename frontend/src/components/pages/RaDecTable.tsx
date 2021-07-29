@@ -2,8 +2,8 @@ import { Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import React, { useEffect, useState } from 'react'
 import { useLocationService } from '../../contexts/LocationServiceContext'
-import type { RaResponse } from '../../models/Models'
-import { getRaValues } from '../../utils/api'
+import type { RaDecResponse } from '../../models/Models'
+import { getRaDecValues } from '../../utils/api'
 import { errorMessage } from '../../utils/message'
 import { getBackendUrl } from '../../utils/resolveBackend'
 
@@ -14,29 +14,34 @@ const HeaderTitle = ({ title }: { title: string }): JSX.Element => (
   </Typography.Title>
 )
 
-const columns: ColumnsType<RaResponse> = [
+const columns: ColumnsType<RaDecResponse> = [
   {
     title: <HeaderTitle title={'Formatted Ra Value'} />,
     dataIndex: 'formattedRa',
     key: 'formattedRa'
+  },
+  {
+    title: <HeaderTitle title={'Formatted Dec Value'} />,
+    dataIndex: 'formattedDec',
+    key: 'formattedDec'
   }
 ]
 // #add-columns
 
 // #use-fetch
 // #add-component
-export const RaTable = (): JSX.Element => {
+export const RaDecTable = (): JSX.Element => {
   // #add-component
   const locationService = useLocationService()
-  const [raValues, setRaValues] = useState<RaResponse[]>()
+  const [raDecValues, setRaValues] = useState<RaDecResponse[]>()
 
   useEffect(() => {
     async function fetchRaValues() {
       const backendUrl = await getBackendUrl(locationService)
       if (backendUrl) {
-        const raValues = await getRaValues(backendUrl)
-        console.error('raValues', raValues)
-        setRaValues(raValues)
+        const raDecValues = await getRaDecValues(backendUrl)
+        console.error('raDecValues', raDecValues)
+        setRaValues(raDecValues)
       } else {
         errorMessage('Failed to fetch ra values')
       }
@@ -50,7 +55,7 @@ export const RaTable = (): JSX.Element => {
     <Table
       rowKey={(record) => record.id}
       pagination={false}
-      dataSource={raValues}
+      dataSource={raDecValues}
       columns={columns}
       bordered
     />

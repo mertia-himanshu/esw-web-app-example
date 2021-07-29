@@ -1,11 +1,12 @@
-#### Request to test greeting endpoint
-POST http://192.168.1.4:8084/raValues
+#### Requests to test raDecValues endpoint
+POST http://<server_ip>:<app_port>/raDecValues
 Content-Type: application/json
 
 {
-  "raInDecimals": 2.13
+  "raInDecimals": 2.13,
+  "decInDecimals": 2.18
 }
 
 
-###
-GET http://192.168.1.4:8084/raValues
+####
+GET http://<server_ip>:<app_port>/raDecValues

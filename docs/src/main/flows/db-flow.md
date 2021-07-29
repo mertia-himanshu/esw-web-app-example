@@ -62,26 +62,26 @@ Use csw-db dependency in `build.sbt`
 Scala
 : @@snip [build.sbt](../../../../backend/build.sbt) { #add-db }
 
-Add dsl context provided by CSW Database package in `RaImpl.scala`
+Add dsl context provided by CSW Database package in `RaDecImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #add-dsl-context }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #add-dsl-context }
 
 We can now update our previous implementation to make use of database.
-Add a query to insert data in db in `RaImpl.scala`
+Add a query to insert data in db in `RaDecImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #insert-raValue-in-db }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #insert-raDecValue-in-db }
 
-Update `raToString` implementation to use this query in `RaImpl.scala`
-
-Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #raToString-impl }
-
-Update `getRaValues` implementation in `RaImpl.scala`
+Update `raDecToString` implementation to use this query in `RaDecImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaImpl.scala) { #get-raValues-from-db }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #raDecToString-impl }
+
+Update `getRaDecValues` implementation in `RaDecImpl.scala`
+
+Scala
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #get-raDecValues-from-db }
 
 Update `SampleWiring.scala`
 
@@ -93,7 +93,7 @@ Scala
 Update implementation to use dsl context
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #raImpl-db-ref }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #raDecImpl-db-ref }
 
 Run backend application
 

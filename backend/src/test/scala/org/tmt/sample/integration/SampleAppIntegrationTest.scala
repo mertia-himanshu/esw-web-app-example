@@ -19,7 +19,7 @@ import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, Client, Realm}
 import org.tmt.embedded_keycloak.impl.StopHandle
 import org.tmt.embedded_keycloak.utils.BearerToken
 import org.tmt.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
-import org.tmt.sample.core.models.{RaRequest, RaResponse}
+import org.tmt.sample.core.models.{RaDecRequest, RaDecResponse}
 import org.tmt.sample.http.HttpCodecs
 import org.tmt.sample.impl.SampleWiring
 
@@ -61,50 +61,50 @@ class SampleAppIntegrationTest extends ScalaTestFrameworkTestKit with AnyWordSpe
   "SampleWiring" must {
 
     // #add-route-test
-    "call raValues and receive Response" in {
-      val raRequest = RaRequest(2.13)
+    "call raDecValues and receive Response" in {
+      val raDecRequest = RaDecRequest(2.13, 2.18)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "raValues"),
-        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
+        uri = appUri.withPath(Path / "raDecValues"),
+        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raDecRequest).toUtf8String.getBytes)
       )
 
       val response: HttpResponse = Http().singleRequest(request).futureValue
       response.status should ===(StatusCode.int2StatusCode(200))
-      Unmarshal(response).to[RaResponse].futureValue.formattedRa should ===(
-        "8h 8m 9.602487087684134s"
-      )
+      val reDecResponse = Unmarshal(response).to[RaDecResponse].futureValue
+      reDecResponse.formattedRa should ===("8h 8m 9.602487087684134s")
+      reDecResponse.formattedDec should ===(s"124°54'17.277618670114634\"")
     }
     // #add-route-test
 
     // #add-secured-route-test
-    "call securedRaValues and receive valid response when user have required role" in {
+    "call securedRaDecValues and receive valid response when user have required role" in {
       val token     = getToken("admin", "password1")()
-      val raRequest = RaRequest(2.13)
+      val raDecRequest = RaDecRequest(2.13, 2.18)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "securedRaValues"),
+        uri = appUri.withPath(Path / "securedRaDecValues"),
         headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
-        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
+        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raDecRequest).toUtf8String.getBytes)
       )
 
       val response: HttpResponse = Http().singleRequest(request).futureValue
       response.status should ===(StatusCode.int2StatusCode(200))
-      Unmarshal(response).to[RaResponse].futureValue.formattedRa should ===(
-        "8h 8m 9.602487087684134s"
-      )
+      val reDecResponse = Unmarshal(response).to[RaDecResponse].futureValue
+      reDecResponse.formattedRa should ===("8h 8m 9.602487087684134s")
+      reDecResponse.formattedDec should ===(s"124°54'17.277618670114634\"")
     }
     // #add-secured-route-test
 
     // #add-secured-route-failure-test
-    "call securedFormattedRa and receive 403 when user does not have required role" in {
+    "call securedRaDecValues and receive 403 when user does not have required role" in {
       val token     = getToken("nonAdmin", "password2")()
-      val raRequest = RaRequest(2.13)
+      val raDecRequest = RaDecRequest(2.13, 2.18)
       val request = HttpRequest(
         HttpMethods.POST,
-        uri = appUri.withPath(Path / "securedRaValues"),
+        uri = appUri.withPath(Path / "securedRaDecValues"),
         headers = token.map(x => Seq(Authorization(OAuth2BearerToken(x)))).getOrElse(Nil),
-        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raRequest).toUtf8String.getBytes)
+        entity = HttpEntity(ContentTypes.`application/json`, Json.encode(raDecRequest).toUtf8String.getBytes)
       )
 
       val response: HttpResponse = Http().singleRequest(request).futureValue

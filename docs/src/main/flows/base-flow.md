@@ -76,40 +76,40 @@ Generated code contains a sample application, we will delete its code and add ou
 These model classes will be used to serialized and deserialized request and response.
 
 * Go to `core/models` in `src`
-* Add `RaRequest.scala` model class
+* Add `RaDecRequest.scala` model class
 
 Scala
-: @@snip [RaRequest.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaRequest.scala) { #request-model }
+: @@snip [RaDecRequest.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaDecRequest.scala) { #request-model }
 
-Add `RaResponse.scala` model class
+Add `RaDecResponse.scala` model class
 
 Scala
-: @@snip [RaResponse.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaResponse.scala) { #response-model }
+: @@snip [RaDecResponse.scala](../../../../backend/src/main/scala/org/tmt/sample/core/models/RaDecResponse.scala) { #response-model }
 
 ### Add our implementation
 
 * Go to `service` in `src`
-* Add a scala trait in `RaService.scala` file and add our `raToString` contract, using our request and response model  
+* Add a scala trait in `RaDecService.scala` file and add our `raDecToString` contract, using our request and response model  
 
 Scala
-: @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #raToString-contract }
+: @@snip [RaDecService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaDecService.scala) { #raDecToString-contract }
 
-Add `getRaValues` contract in service `RaService.scala`
+Add `getRaDecValues` contract in service `RaDecService.scala`
 
 Scala
-: @@snip [RaService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaService.scala) { #getRaValues-contract }
+: @@snip [RaDecService.scala](../../../../backend/src/main/scala/org/tmt/sample/service/RaDecService.scala) { #getRaDecValues-contract }
 
 * Go to `impl` package in `src`
-* Add `RaImpl.scala`
-* Extend `RaService.scala` to implement `raToString`
+* Add `RaDecImpl.scala`
+* Extend `RaDecService.scala` to implement `raDecToString`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaImpl.scala) { #raToString-impl }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaDecImpl.scala) { #raDecToString-impl }
 
-Implement `getRaValues` contract in `RaImpl.scala`
+Implement `getRaDecValues` contract in `RaDecImpl.scala`
 
 Scala
-: @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaImpl.scala) { #getRaValues-impl }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaDecImpl.scala) { #getRaDecValues-impl }
 
 Lets now try to compile our code
 
@@ -143,10 +143,10 @@ sbt:backend> compile
 ### Add Route for our implementation
 
 * Go to `SampleWiring.scala`
-* Add `raImpl` reference
+* Add `raDecImpl` reference
 
 Scala
-: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/SampleWiring.scala) { #raImpl-ref }
+: @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/SampleWiring.scala) { #raDecImpl-ref }
 
 Add Route in placeholder
 
@@ -154,10 +154,10 @@ Scala
 : @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/SampleWiring.scala) { #add-route }
 
 * Go to `SampleRoute.scala`
-* Add dependency of `raService` to `SampleRoute`
+* Add dependency of `raDecService` to `SampleRoute`
 
 Scala
-: @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #raImpl-ref }
+: @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #raDecImpl-ref }
 
 Add route along with an implicit execution context which is provided by ServerWiring.
 
@@ -202,32 +202,34 @@ sbt:backend> run start
 
 If application is successfully started it, will show log with `server_ip` and `app_port` registered to location service.
 
-Update `apptest.http` and test your `raValues` POST route
+Update `apptest.http` and test your `raDecValues` POST route
 
 ```bash
-#### Request to test raValues endpoint
-POST http://<server_ip>:<app_port>/raValues
+#### Request to test raDecValues endpoint
+POST http://<server_ip>:<app_port>/raDecValues
 Content-Type: application/json
 
 {
-  "raInDecimals": 2.13
+  "raInDecimals": 2.13,
+  "decInDecimals": 2.18
 }
 
 ```
 
-Successful response contains the formattedRa value with a unique id.
+Successful response contains the formattedRa and formattedDec value with a unique id.
 
 ```bash
 {
   "id": "80ab3f42-a4cf-4249-b9a0-2b209aab48e8",
-  "formattedRa": "8h 8m 9.602487087684134s"
+  "formattedRa": "8h 8m 9.602487087684134s",
+  "formattedDec": "124°54'17.277618670114634\""
 }
 ```
 
-Add this to your `apptest.http` and test your `raValues` GET route
+Add this to your `apptest.http` and test your `raDecValues` GET route
 
 ```http
-GET http://<server_ip>:<app_port>/raValues
+GET http://<server_ip>:<app_port>/raDecValues
 ```
 
 Successful response contains list of with formattedRa value.
@@ -236,7 +238,8 @@ Successful response contains list of with formattedRa value.
 [
   {
     "id": "d6a16719-72bf-4928-8bf3-abb125186f49",
-    "formattedRa": "8h 8m 9.602487087684134s"
+    "formattedRa": "8h 8m 9.602487087684134s",
+    "formattedDec": "124°54'17.277618670114634\""
   }
 ]
 ```
@@ -275,51 +278,51 @@ Typescript
 For GET Route
 
 Typescript
-: @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-saved-ra-values }
+: @@snip [api.ts](../../../../frontend/src/utils/api.ts) { #fetch-saved-ra-dec-values }
 
 
 ### Add our React component
 
-* In `pages` folder, create `RaInput.tsx`
-* Add a simple input form to the `RaInput` react component
+* In `pages` folder, create `RaDecInput.tsx`
+* Add a simple input form to the `RaDecInput` react component
 
 Typescript
-: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #add-component }
+: @@snip [RaDecInput.tsx](../../../../frontend/src/components/pages/RaDecInput.tsx) { #add-component }
 
-Use `postRaValues` method in our component
+Use `postRaDecValues` method in our component
 
 Typescript
-: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #use-fetch }
+: @@snip [RaDecInput.tsx](../../../../frontend/src/components/pages/RaDecInput.tsx) { #use-fetch }
 
 You would require locationService instance for getting backend url. This instance is available via context named `LocationServiceProvider`.
-Add the following as first line inside the `RaInput` component.
+Add the following as first line inside the `RaDecInput` component.
 
 Typescript
-: @@snip [RaInput.tsx](../../../../frontend/src/components/pages/RaInput.tsx) { #use-location-service-from-context }
+: @@snip [RaDecInput.tsx](../../../../frontend/src/components/pages/RaDecInput.tsx) { #use-location-service-from-context }
 
-* In `pages` folder ,Add new component `RaTable.tsx` to display ra values table
+* In `pages` folder ,Add new component `RaDecTable.tsx` to display ra values table
 
 Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-component }
+: @@snip [RaDecTable.tsx](../../../../frontend/src/components/pages/RaDecTable.tsx) { #add-component }
 
 Add columns for the table in this component
 
 Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #add-columns }
+: @@snip [RaDecTable.tsx](../../../../frontend/src/components/pages/RaDecTable.tsx) { #add-columns }
 
-Use our `getRaValues` method in this component
-
-Typescript
-: @@snip [RaTable.tsx](../../../../frontend/src/components/pages/RaTable.tsx) { #use-fetch }
-
-* In `pages` folder ,Add new component `Ra.tsx` to compose above created components and display in a page
+Use our `getRaDecValues` method in this component
 
 Typescript
-: @@snip [Ra.tsx](../../../../frontend/src/components/pages/Ra.tsx) { #add-component }
+: @@snip [RaDecTable.tsx](../../../../frontend/src/components/pages/RaDecTable.tsx) { #use-fetch }
 
-Next, we need to show our newly created `Ra` component.
+* In `pages` folder ,Add new component `RaDec.tsx` to compose above created components and display in a page
 
-Update `Routes.tsx` file and map our new created `Ra` component to `/` path.
+Typescript
+: @@snip [RaDec.tsx](../../../../frontend/src/components/pages/RaDec.tsx) { #add-component }
+
+Next, we need to show our newly created `RaDec` component.
+
+Update `Routes.tsx` file and map our new created `RaDec` component to `/` path.
 
 Typescript
 : @@snip [App.tsx](../../../../frontend/src/routes/Routes.tsx) { #add-route }
@@ -338,9 +341,9 @@ $:frontend> npm start
 ```
 
 It will launch application in Browser with an input form.
-* Add a value like '2.13' and click submit. 
+* Add a value like '2.13' and '2.18' and click submit. 
 * Refresh page
-* You will see formatted ra value in table below the input form.
+* You will see formatted ra and dec value in table below the input form.
 
 To build the application for its production deployment
 

@@ -15,13 +15,13 @@ export const MenuBar = (): JSX.Element => {
     <>
       {/*// #add-route-action */}
       <Menu mode='horizontal'>
-        <Menu.Item key='ra'>
-          <Link to='/'>Ra</Link>
+        <Menu.Item key='raDec'>
+          <Link to='/'>RaDec</Link>
         </Menu.Item>
         {/*// #add-route-action */}
         {/*// #add-protected-route-action */}
-        <Menu.Item key='securedRa'>
-          <Link to='/securedRa'>SecuredRa</Link>
+        <Menu.Item key='securedRaDec'>
+          <Link to='/securedRaDec'>SecuredRaDec</Link>
         </Menu.Item>
         {/*// #add-protected-route-action */}
         {/*// #add-login-logout */}

@@ -1,10 +1,12 @@
 // #add-models
-export interface RaRequest {
+export interface RaDecRequest {
   raInDecimals: number
+  decInDecimals: number
 }
 
-export interface RaResponse {
+export interface RaDecResponse {
   id: string
   formattedRa: string
+  formattedDec: string
 }
 // #add-models

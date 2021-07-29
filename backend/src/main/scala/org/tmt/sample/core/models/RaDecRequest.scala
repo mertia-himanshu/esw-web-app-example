@@ -1,5 +1,5 @@
 package org.tmt.sample.core.models
 
 // #request-model
-case class RaRequest(raInDecimals: Double)
+case class RaDecRequest(raInDecimals: Double, decInDecimals: Double)
 // #request-model

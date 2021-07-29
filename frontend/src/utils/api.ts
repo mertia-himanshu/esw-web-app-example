@@ -1,31 +1,39 @@
-import type { RaRequest, RaResponse } from '../models/Models'
+import type { RaDecRequest, RaDecResponse } from '../models/Models'
 import { get, post } from './Http'
 
 // #fetch-data
-export const postRaValues = async (
+export const postRaDecValues = async (
   baseUrl: string,
-  raRequest: RaRequest
-): Promise<RaResponse | undefined> =>
-  (await post<RaRequest, RaResponse>(baseUrl + 'raValues', raRequest))
-    .parsedBody
+  raDecRequest: RaDecRequest
+): Promise<RaDecResponse | undefined> =>
+  (
+    await post<RaDecRequest, RaDecResponse>(
+      baseUrl + 'raDecValues',
+      raDecRequest
+    )
+  ).parsedBody
 // #fetch-data
 
 // #secured-fetch-data
-export const securedPostRaValues = async (
+export const securedPostRaDecValues = async (
   baseUrl: string,
-  raRequest: RaRequest,
+  raDecRequest: RaDecRequest,
   token: string
-): Promise<RaResponse | undefined> =>
+): Promise<RaDecResponse | undefined> =>
   (
-    await post<RaRequest, RaResponse>(baseUrl + 'securedRaValues', raRequest, {
-      Authorization: `Bearer ${token}`
-    })
+    await post<RaDecRequest, RaDecResponse>(
+      baseUrl + 'securedRaDecValues',
+      raDecRequest,
+      {
+        Authorization: `Bearer ${token}`
+      }
+    )
   ).parsedBody
 // #secured-fetch-data
 
-// #fetch-saved-ra-values
-export const getRaValues = async (
+// #fetch-saved-ra-dec-values
+export const getRaDecValues = async (
   baseUrl: string
-): Promise<RaResponse[] | undefined> =>
-  (await get<RaResponse[]>(baseUrl + 'raValues')).parsedBody
-// #fetch-saved-ra-values
+): Promise<RaDecResponse[] | undefined> =>
+  (await get<RaDecResponse[]>(baseUrl + 'raDecValues')).parsedBody
+// #fetch-saved-ra-dec-values

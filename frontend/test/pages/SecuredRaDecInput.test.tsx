@@ -5,14 +5,14 @@ import { HttpConnection, HttpLocation, Prefix } from '@tmtsoftware/esw-ts'
 import { expect } from 'chai'
 import React from 'react'
 import { anything, capture, deepEqual, verify, when } from 'ts-mockito'
-import { SecuredRa } from '../../src/components/pages/SecuredRa'
+import { SecuredRaDecInput } from '../../src/components/pages/SecuredRaDecInput'
 import {
   locationServiceMock,
   mockFetch,
   renderWithRouter
 } from '../utils/test-utils'
 
-describe('SecuredRa', () => {
+describe('Secured Ra Dec Input', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 
   const httpLocation: HttpLocation = {
@@ -27,17 +27,29 @@ describe('SecuredRa', () => {
 
   it('should render Input form and sent in to backend', async () => {
     const raInDecimals = 2.13
-    const raRequest = { raInDecimals }
-    const response = new Response(JSON.stringify({ formattedRa: 'some-value' }))
+    const decInDecimals = 2.18
+    const request = { raInDecimals, decInDecimals }
+    const response = new Response(
+      JSON.stringify({
+        formattedRa: 'some-value1',
+        formattedDec: 'some-value2'
+      })
+    )
     const fetch = mockFetch()
 
     when(fetch(anything(), anything())).thenResolve(response)
 
-    renderWithRouter(<SecuredRa />)
+    renderWithRouter(<SecuredRaDecInput />)
 
-    const input = (await screen.findByRole('RaInDecimals')) as HTMLInputElement
+    const raInput = (await screen.findByRole(
+      'RaInDecimals'
+    )) as HTMLInputElement
+    const decInput = (await screen.findByRole(
+      'DecInDecimals'
+    )) as HTMLInputElement
 
-    userEvent.type(input, raInDecimals.toString())
+    userEvent.type(raInput, raInDecimals.toString())
+    userEvent.type(decInput, decInDecimals.toString())
 
     const submitButton = (await screen.findByRole(
       'Submit'
@@ -47,11 +59,11 @@ describe('SecuredRa', () => {
 
     verify(locationServiceMock.find(deepEqual(connection))).called()
     const [firstArg, secondArg] = capture(fetch).last()
-    expect(firstArg).to.equal(httpLocation.uri + 'securedRaValues')
+    expect(firstArg).to.equal(httpLocation.uri + 'securedRaDecValues')
 
     const expectedReq = {
       method: 'POST',
-      body: JSON.stringify(raRequest),
+      body: JSON.stringify(request),
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer token string'

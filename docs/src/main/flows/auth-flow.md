@@ -21,22 +21,22 @@ Typescript
 
 ### Add our React component to consume secured fetch
 
-* In `pages` folder, create a file named `SecuredRa.tsx`
-* Add the following form to the `SecuredRa` react component
+* In `pages` folder, create a file named `SecuredRaDecInput.tsx`
+* Add the following form to the `SecuredRaDecInput` react component
 
 Typescript
-: @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #add-component }
+: @@snip [SecuredRaDecInput.tsx](../../../../frontend/src/components/pages/SecuredRaDecInput.tsx) { #add-component }
 
 ### Use secured fetch in our component
 
 Typescript
-: @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-fetch }
+: @@snip [SecuredRaDecInput.tsx](../../../../frontend/src/components/pages/SecuredRaDecInput.tsx) { #use-fetch }
 
 You would require locationService instance for getting backend url. This instance is available via context named `LocationServiceProvider`.
 Add the following as first line inside the `SecuredRa` component.
 
 Typescript
-: @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-location-service-from-context }
+: @@snip [SecuredRaDecInput.tsx](../../../../frontend/src/components/pages/SecuredRaDecInput.tsx) { #use-location-service-from-context }
 
 Add protected route in `App.tsx`
 

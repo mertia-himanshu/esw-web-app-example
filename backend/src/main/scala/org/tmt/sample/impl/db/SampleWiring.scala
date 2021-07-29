@@ -26,11 +26,11 @@ class SampleWiring(val port: Option[Int]) extends ServerWiring {
     )
   // #db-wiring-setup
 
-  // #raImpl-db-ref
-  lazy val raImpl = new RaImpl(dslContext)
-  // #raImpl-db-ref
+  // #raDecImpl-db-ref
+  lazy val raDecImpl = new RaDecImpl(dslContext)
+  // #raDecImpl-db-ref
 
   // #add-route
-  override lazy val routes: Route = new SampleRoute(raImpl, securityDirectives).route
+  override lazy val routes: Route = new SampleRoute(raDecImpl, securityDirectives).route
   // #add-route
 }

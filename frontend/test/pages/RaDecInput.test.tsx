@@ -5,14 +5,14 @@ import { HttpConnection, HttpLocation, Prefix } from '@tmtsoftware/esw-ts'
 import { expect } from 'chai'
 import React from 'react'
 import { anything, capture, deepEqual, verify, when } from 'ts-mockito'
-import { RaInput } from '../../src/components/pages/RaInput'
+import { RaDecInput } from '../../src/components/pages/RaDecInput'
 import {
   locationServiceMock,
   mockFetch,
   renderWithRouter
 } from '../utils/test-utils'
 
-describe('RaInput', () => {
+describe('Ra Dec Input', () => {
   const connection = HttpConnection(Prefix.fromString('ESW.sample'), 'Service')
 
   const httpLocation: HttpLocation = {
@@ -27,17 +27,29 @@ describe('RaInput', () => {
 
   it('should render Input form and sent in to backend', async () => {
     const raInDecimals = 2.13
-    const raRequest = { raInDecimals }
-    const response = new Response(JSON.stringify({ formattedRa: 'some-value' }))
+    const decInDecimals = 2.18
+    const request = { raInDecimals, decInDecimals }
+    const response = new Response(
+      JSON.stringify({
+        formattedRa: 'some-value1',
+        formattedDec: 'some-value2'
+      })
+    )
     const fetch = mockFetch()
 
     when(fetch(anything(), anything())).thenResolve(response)
 
-    renderWithRouter(<RaInput />)
+    renderWithRouter(<RaDecInput />)
 
-    const input = (await screen.findByRole('RaInDecimals')) as HTMLInputElement
+    const raInput = (await screen.findByRole(
+      'RaInDecimals'
+    )) as HTMLInputElement
+    const decInput = (await screen.findByRole(
+      'DecInDecimals'
+    )) as HTMLInputElement
 
-    userEvent.type(input, raInDecimals.toString())
+    userEvent.type(raInput, raInDecimals.toString())
+    userEvent.type(decInput, decInDecimals.toString())
 
     const submitButton = (await screen.findByRole(
       'Submit'
@@ -47,11 +59,11 @@ describe('RaInput', () => {
 
     verify(locationServiceMock.find(deepEqual(connection))).called()
     const [firstArg, secondArg] = capture(fetch).last()
-    expect(firstArg).to.equal(httpLocation.uri + 'raValues')
+    expect(firstArg).to.equal(httpLocation.uri + 'raDecValues')
 
     const expectedReq = {
       method: 'POST',
-      body: JSON.stringify(raRequest),
+      body: JSON.stringify(request),
       headers: { 'Content-Type': 'application/json' }
     }
 
