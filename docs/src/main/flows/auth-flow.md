@@ -10,25 +10,6 @@ We have set up some [sample users](https://tmtsoftware.github.io/csw/apps/cswser
 Scala
 : @@snip [SampleRoute.scala](../../../../backend/src/main/scala/org/tmt/sample/http/SampleRoute.scala) { #add-secured-route }
 
-### Add test for newly added route
-
-Add test in `SampleRouteTest.scala` for protected route
-
-Scala
-: @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-secured-route-test }
-
-### Add integration tests for newly added route
-
-Add positive test for user with required role in `SampleAppIntegrationTest.scala`
-
-Scala
-: @@snip [SampleAppIntegrationTest.scala](../../../../backend/src/test/scala/org/tmt/sample/integration/SampleAppIntegrationTest.scala) { #add-secured-route-test }
-
-Add Failure test for user without required role in `SampleAppIntegrationTest.scala`
-
-Scala
-: @@snip [SampleAppIntegrationTest.scala](../../../../backend/src/test/scala/org/tmt/sample/integration/SampleAppIntegrationTest.scala) { #add-secured-route-failure-test }
-
 ## Consume protected route in frontend
 
 ### Add secured Fetch
@@ -40,7 +21,7 @@ Typescript
 
 ### Add our React component to consume secured fetch
 
-* In `pages` folder create a file named `SecuredRa.tsx`
+* In `pages` folder, create a file named `SecuredRa.tsx`
 * Add the following form to the `SecuredRa` react component
 
 Typescript
@@ -55,7 +36,7 @@ You would require locationService instance for getting backend url. This instanc
 Add the following as first line inside the `SecuredRa` component.
 
 Typescript
-: @@snip [Ra.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-location-service-from-context }
+: @@snip [SecuredRa.tsx](../../../../frontend/src/components/pages/SecuredRa.tsx) { #use-location-service-from-context }
 
 Add protected route in `App.tsx`
 
@@ -69,11 +50,6 @@ Update Menubar
 
 Typescript
 : @@snip [App.tsx](../../../../frontend/src/components/menu/MenuBar.tsx) { #add-protected-route-action }
-
-Add `SecuredRa.test.tsx` in `test/pages`
-
-Typescript
-: @@snip [SecuredRa.test.tsx](../../../../frontend/test/pages/SecuredRa.test.tsx) { #add-test }
 
 ### Add Login & Logout functionality
 

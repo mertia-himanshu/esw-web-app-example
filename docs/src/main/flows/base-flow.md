@@ -66,20 +66,16 @@ idea .
 
 Generated code contains a sample application, we will delete its code and add ours where appropriate.
 
-* Delete folder `src/main/java` ,`src/test/java`
-* Delete file `JSampleImplWrapper.scala`, `JSampleImplWrapperTest.scala`, `SampleImpl.scala`, `SampleImplTest.scala`
-* Go to `SampleRouteTest.scala`
-* Remove existing tests
-* Remove any references to deleted classes
-* Go to `SampleAppIntegrationTest.scala`
-* Remove existing tests
+* Delete folder `src/main/java` ,`src/test`
+* Delete Existing files from `core/models` package in `src`
+* Delete existing files from `service` package in `src`
+* Delete existing files from `impl` package in `src`
 
 ### Add our Models classes
 
-These model classes will be used to serialized and deserialized your request and response.
+These model classes will be used to serialized and deserialized request and response.
 
 * Go to `core/models` in `src`
-* Delete Existing Model classes  
 * Add `RaRequest.scala` model class
 
 Scala
@@ -92,8 +88,7 @@ Scala
 
 ### Add our implementation
 
-* Add `raToString` contract in service `RaService.scala`
-* Go to `src`, add package folder with name `service`
+* Go to `service` in `src`
 * Add a scala trait in `RaService.scala` file and add our `raToString` contract, using our request and response model  
 
 Scala
@@ -116,16 +111,6 @@ Implement `getRaValues` contract in `RaImpl.scala`
 Scala
 : @@snip [RaImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/RaImpl.scala) { #getRaValues-impl }
 
-* Add `RaImplTest.scala` in corresponding `test` directory
-* Implement test `convert Ra to String`
-
-@@@note
-Ensure `Matchers` trait is imported via `import org.scalatest.matchers.should.Matchers` & not `import org.scalatest.matchers.must.Matchers`
-@@@
-
-Scala
-: @@snip [RaImplTest.scala](../../../../backend/src/test/scala/org/tmt/sample/core/RaImplTest.scala) { #raToString-impl-test }
-
 Lets now try to compile our code
 
 ```bash
@@ -147,19 +132,12 @@ override lazy val routes: Route = ???
 val route: Route = ???
 ```
 
-Delete references to earlier deleted classes from scala files `SampleRoute`, `HttpCodecs`, `SampleRoutTest`
-and `SampleAppIntegrationTest`
+Delete references to earlier deleted classes from scala files `SampleRoute`, `HttpCodecs`
 
 Try compiling code again, this time it should compile
 
 ```bash
 sbt:backend> compile
-```
-
-Try running the newly added test
-
-```bash
-sbt:backend> testOnly org.tmt.sample.core.RaImplTest
 ```
 
 ### Add Route for our implementation
@@ -206,40 +184,6 @@ Scala
 
 SampleRoute should compile now successfully
 
-### Add tests for newly added route
-
-* Go to `SampleRouteTest.scala`
-* Add raImpl mock
-
-Scala
-: @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-mock }
-
-Add its dependency in SampleRoute Instance in `SampleRouteTest.scala`
-
-Scala
-: @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-mock-dep }
-
-Lets implement route test
-
-* Go to `SampleRouteTest.scala`
-* Add following test for our route
-
-Scala
-: @@snip [SampleRouteTest.scala](../../../../backend/src/test/scala/org/tmt/sample/http/SampleRouteTest.scala) { #add-route-test }
-
-Lets implement integration test
-
-* Go to `SampleAppIntegrationTest.scala`
-* Add integration test for our route
-
-Scala
-: @@snip [SampleAppIntegrationTest.scala](../../../../backend/src/test/scala/org/tmt/sample/integration/SampleAppIntegrationTest.scala) { #add-route-test }
-
-Try running all tests
-
-```bash
-sbt:backend> test
-```
 
 ### Manually test our application
 
@@ -393,26 +337,13 @@ Now, we have linked all pieces of our frontend application.
 $:frontend> npm start
 ```
 
-Adding tests for UI components
-
-Add `RaInput.test.tsx` in `test/pages`
-
-Typescript
-: @@snip [RaInput.test.tsx](../../../../frontend/test/pages/RaInput.test.tsx) { #add-test }
-
-To run the test
-
-```bash
-$:frontend> npm run test
-```
+It will launch application in Browser with an input form.
+* Add a value like '2.13' and click submit. 
+* Refresh page
+* You will see formatted ra value in table below the input form.
 
 To build the application for its production deployment
 
 ```bash
 $:frontend> npm run build
 ```
-
-It will launch application in Browser with an input form.
-* Add a value like '2.13' and click submit. 
-* Refresh page
-* You will see formatted ra value in table below the input form.
