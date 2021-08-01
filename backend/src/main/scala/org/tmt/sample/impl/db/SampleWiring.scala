@@ -2,7 +2,6 @@ package org.tmt.sample.impl.db
 
 import akka.http.scaladsl.server.Route
 import csw.database.DatabaseServiceFactory
-import csw.network.utils.SocketUtils
 import esw.http.template.wiring.ServerWiring
 import org.jooq.DSLContext
 import org.tmt.sample.http.SampleRoute
@@ -27,7 +26,8 @@ class SampleWiring(val port: Option[Int]) extends ServerWiring {
   // #db-wiring-setup
 
   // #raDecImpl-db-ref
-  lazy val raDecImpl = new RaDecImpl(dslContext)
+  lazy val repository = new RaDecRepository(dslContext)
+  lazy val raDecImpl  = new RaDecImpl(repository)
   // #raDecImpl-db-ref
 
   // #add-route

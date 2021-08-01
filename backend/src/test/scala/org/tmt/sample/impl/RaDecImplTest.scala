@@ -1,10 +1,9 @@
-package org.tmt.sample.core
+package org.tmt.sample.impl
 
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.tmt.sample.core.models.RaDecRequest
-import org.tmt.sample.impl.RaDecImpl
 // #raDecToString-impl-test
 class RaDecImplTest extends AnyWordSpec with Matchers {
   "RaDecImpl" must {

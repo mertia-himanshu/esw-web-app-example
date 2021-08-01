@@ -31,9 +31,10 @@ Following command can be used to create a table
 
 ```sql
 postgres = >
-CREATE TABLE RAVALUES(
+CREATE TABLE RADECVALUES(
 id TEXT             PRIMARY KEY     NOT NULL,
-formattedRa TEXT                    NOT NULL
+formattedRa TEXT                    NOT NULL,
+formattedDec TEXT                    NOT NULL
 );
 ```
 
@@ -52,36 +53,40 @@ Scala
 
 ## Update backend Implementation
 
-Add csw-db dependency in `Libs.scala`
+Add csw-database dependency in `Libs.scala`
 
 Scala
 : @@snip [Libs.scala](../../../../backend/project/Libs.scala) { #add-db }
 
-Use csw-db dependency in `build.sbt`
+Use csw-database dependency in `build.sbt`
 
 Scala
 : @@snip [build.sbt](../../../../backend/build.sbt) { #add-db }
 
-Add dsl context provided by CSW Database package in `RaDecImpl.scala`
+Go to `impl` package, Add repository class `RaDecRepository.scala` using dsl context provided by CSW Database
 
 Scala
-: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #add-dsl-context }
+: @@snip [RaDecRepository.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecRepository.scala) { #add-repository }
 
-We can now update our previous implementation to make use of database.
-Add a query to insert data in db in `RaDecImpl.scala`
+Add method to insert data to db
 
 Scala
-: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #insert-raDecValue-in-db }
+: @@snip [RaDecRepository.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecRepository.scala) { #insert-raDecValue-in-db }
 
-Update `raDecToString` implementation to use this query in `RaDecImpl.scala`
+Add method to get data from db
+
+Scala
+: @@snip [RaDecRepository.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecRepository.scala) { #get-raDecValues-from-db }
+
+Update `raDecToString` implementation to use insert query method in `RaDecImpl.scala`
 
 Scala
 : @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #raDecToString-impl }
 
-Update `getRaDecValues` implementation in `RaDecImpl.scala`
+Update `getRaDecValues` implementation to use get values query method in `RaDecImpl.scala`
 
 Scala
-: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #get-raDecValues-from-db }
+: @@snip [RaDecImpl.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/RaDecImpl.scala) { #getRaDecValues-impl }
 
 Update `SampleWiring.scala`
 
@@ -90,7 +95,7 @@ Add db setup in `SampleWiring.scala`
 Scala
 : @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #db-wiring-setup }
 
-Update implementation to use dsl context
+Add repository reference and Update implementation reference
 
 Scala
 : @@snip [SampleWiring.scala](../../../../backend/src/main/scala/org/tmt/sample/impl/db/SampleWiring.scala) { #raDecImpl-db-ref }
