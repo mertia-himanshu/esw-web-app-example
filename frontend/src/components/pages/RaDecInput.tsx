@@ -35,9 +35,14 @@ export const RaDecInput = (): JSX.Element => {
   // #use-fetch
   // #add-component
   return (
-    <Form onFinish={onFinish}>
+    <Form
+      onFinish={onFinish}
+      style={{ padding: '1rem' }}
+      wrapperCol={{
+        span: 1
+      }}>
       <Form.Item label='RaInDecimals' name='raInDecimals'>
-        <Input role='RaInDecimals' />
+        <Input role='RaInDecimals' style={{ marginLeft: '0.5rem' }} />
       </Form.Item>
       <Form.Item label='DecInDecimals' name='decInDecimals'>
         <Input role='DecInDecimals' />
